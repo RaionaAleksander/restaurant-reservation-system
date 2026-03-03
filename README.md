@@ -61,7 +61,8 @@ http://localhost:8080/swagger-ui.html
 - Project setup completed
 - Database configured
 - RestaurantTable entity created
-- Reservation entity implemented with status and customer data fields
+- Reservation entity implemented
+- ReservationRepository created
 
 ## Future Plans
 
