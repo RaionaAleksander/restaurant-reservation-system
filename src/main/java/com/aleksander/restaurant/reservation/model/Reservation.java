@@ -29,4 +29,11 @@ public class Reservation {
 
     @Column(nullable = false)
     private Integer partySize;
+
+    @Column(nullable = false)
+    private String customerName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReservationStatus status;
 }
