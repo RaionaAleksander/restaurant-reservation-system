@@ -24,7 +24,7 @@ public class ReservationService {
             LocalDateTime endTime,
             Integer partySize) {
 
-        if (startTime.isAfter(endTime)) {
+        if (!startTime.isBefore(endTime)) {
             throw new IllegalArgumentException("Start time must be before end time");
         }
 
