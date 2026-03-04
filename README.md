@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 1.5 hours
+Total time spent: 2.0 hours
 
 ## Architecture
 
@@ -63,6 +63,7 @@ http://localhost:8080/swagger-ui.html
 - RestaurantTable entity created
 - Reservation entity implemented
 - ReservationRepository created
+- ReservationService implemented with basic business validation
 
 ## Future Plans
 
