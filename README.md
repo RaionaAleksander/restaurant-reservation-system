@@ -66,6 +66,7 @@ http://localhost:8080/swagger-ui.html
 - ReservationService implemented with basic business validation
 - ReservationController created with POST endpoint
 - Reservation flow tested via Swagger
+- GlobalExceptionHandler added for proper API error responses (400 instead of 500)
 
 ## Future Plans
 
