@@ -67,6 +67,7 @@ http://localhost:8080/swagger-ui.html
 - ReservationController created with POST endpoint
 - Reservation flow tested via Swagger
 - GlobalExceptionHandler added for proper API error responses (400 instead of 500)
+- Fixed infinite JSON recursion in bidirectional JPA relationship
 
 ## Future Plans
 

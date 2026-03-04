@@ -1,6 +1,7 @@
 package com.aleksander.restaurant.reservation.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import java.util.List;
 
@@ -46,5 +47,6 @@ public class RestaurantTable {
     private boolean accessible;
 
     @OneToMany(mappedBy = "table", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Reservation> reservations;
 }
