@@ -64,6 +64,8 @@ http://localhost:8080/swagger-ui.html
 - Reservation entity implemented
 - ReservationRepository created
 - ReservationService implemented with basic business validation
+- ReservationController created with POST endpoint
+- Reservation flow tested via Swagger
 
 ## Future Plans
 
