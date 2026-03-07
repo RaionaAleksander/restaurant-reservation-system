@@ -136,6 +136,7 @@ http://localhost:8080/swagger-ui.html
 - Added validation for minimum and maximum reservation duration limits.
 - Added validation to ensure reservation times follow 15-minute scheduling slots.
 - Improved Swagger documentation with reservation rules description.
+- Migrated configuration binding to `@ConfigurationPropertiesScan` following modern Spring Boot 3 practices.
 
 ## Future Plans
 
