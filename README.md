@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 8 hours
+Total time spent: 8.5 hours
 
 ## Architecture
 
@@ -138,6 +138,7 @@ http://localhost:8080/swagger-ui.html
 - Improved Swagger documentation with reservation rules description.
 - Migrated configuration binding to `@ConfigurationPropertiesScan` following modern Spring Boot 3 practices.
 - Refactored reservation generator to use precomputed valid time slots.
+- Added GET /api/tables endpoint to retrieve restaurant table layout information.
 
 ## Future Plans
 
