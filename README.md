@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 4 hours
+Total time spent: 4.5 hours
 
 ## Architecture
 
@@ -124,6 +124,8 @@ http://localhost:8080/swagger-ui.html
 - DataInitializer implemented to automatically populate restaurant tables on application startup
 - Random reservation generation added (50 reservations created on startup)
 - Database tables and reservations are automatically reset and regenerated on application startup
+- Added configurable random reservation generator.  
+  Reservation generation parameters are now externalized into `reservation-generator.properties`, allowing developers to control the number of generated reservations, client names, restaurant working hours, and visit durations without changing the code.
 
 ## Future Plans
 

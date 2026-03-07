@@ -29,6 +29,7 @@ public class DataInitializer implements CommandLineRunner {
     private final ReservationRepository reservationRepository;
     private final EntityManager entityManager;
     private final ObjectMapper objectMapper;
+    private final ReservationGeneratorProperties generatorProperties;
 
     @Override
     @Transactional
@@ -52,19 +53,25 @@ public class DataInitializer implements CommandLineRunner {
 
     private void generateRandomReservations() {
 
-        List<RestaurantTable> tables = tableRepository.findAll();
+        int targetReservations = generatorProperties.getCount();
+        if (targetReservations <= 0)
+            return;
 
+        List<RestaurantTable> tables = tableRepository.findAll();
         Random random = new Random();
         int created = 0;
 
-        while (created < 50) {
-
+        while (created < targetReservations) {
             RestaurantTable table = tables.get(random.nextInt(tables.size()));
 
-            LocalDate date = LocalDate.now().plusDays(1 + random.nextInt(7));
+            LocalDate date = LocalDate.now().plusDays(1 + random.nextInt(generatorProperties.getDaysRange()));
 
-            int startHour = 12 + random.nextInt(8);
-            int duration = 1 + random.nextInt(3);
+            int openHour = generatorProperties.getOpenTime().getHour();
+            int closeHour = generatorProperties.getCloseTime().getHour();
+            int startHour = openHour + random.nextInt(Math.max(closeHour - openHour - 1, 1));
+
+            int duration = generatorProperties.getMinDuration()
+                    + random.nextInt(generatorProperties.getMaxDuration() - generatorProperties.getMinDuration() + 1);
 
             LocalDateTime startTime = date.atTime(startHour, 0);
             LocalDateTime endTime = startTime.plusHours(duration);
@@ -76,11 +83,20 @@ public class DataInitializer implements CommandLineRunner {
                             endTime.isAfter(existing.getStartTime()));
 
             if (!conflict) {
+                String customerName;
+                if (generatorProperties.getClientNames() == null
+                        || generatorProperties.getClientNames().isEmpty()) {
+                    customerName = "Generated Guest " + created;
+                } else {
+                    customerName = generatorProperties.getClientNames()
+                            .get(random.nextInt(generatorProperties.getClientNames().size()));
+                }
 
                 Reservation reservation = Reservation.builder()
                         .table(table)
-                        .customerName("Generated Guest " + created)
-                        .partySize(Math.min(table.getCapacity(), 1 + random.nextInt(table.getCapacity())))
+                        .customerName(customerName)
+                        .partySize(Math.min(table.getCapacity(),
+                                1 + random.nextInt(table.getCapacity())))
                         .startTime(startTime)
                         .endTime(endTime)
                         .status(ReservationStatus.ACTIVE)
