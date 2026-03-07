@@ -58,6 +58,10 @@ public class ReservationService {
             throw new IllegalArgumentException("Invalid reservation duration");
         }
 
+        if (startTime.getMinute() % 15 != 0 || endTime.getMinute() % 15 != 0) {
+            throw new IllegalArgumentException("Reservation time must be in 15-minute intervals");
+        }
+
         RestaurantTable table = tableRepository.findById(tableId)
                 .orElseThrow(() -> new IllegalArgumentException("Table not found"));
 

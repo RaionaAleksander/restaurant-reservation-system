@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 7 hours
+Total time spent: 7.5 hours
 
 ## Architecture
 
@@ -134,6 +134,7 @@ http://localhost:8080/swagger-ui.html
 - Added validation to ensure reservations can only be created within restaurant working hours.
 - Added validation to prevent reservations beyond allowed future days range.
 - Added validation for minimum and maximum reservation duration limits.
+- Added validation to ensure reservation times follow 15-minute scheduling slots.
 
 ## Future Plans
 
