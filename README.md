@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 6 hours
+Total time spent: 6.5 hours
 
 ## Architecture
 
@@ -130,6 +130,7 @@ http://localhost:8080/swagger-ui.html
 - Separated reservation configuration into a dedicated `reservation.properties` file.  
   This file now contains restaurant business rules such as working hours, reservation duration limits, and reservation generation settings. Client names have been removed.
 - Reservation generation now uses 15-minute time slots and respects restaurant working hours.
+- Fixed reservation time generation to respect restaurant opening minutes and 15-minute time slots.
 
 ## Future Plans
 

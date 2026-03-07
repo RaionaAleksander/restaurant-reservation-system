@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
 
@@ -70,13 +71,19 @@ public class DataInitializer implements CommandLineRunner {
             LocalDate date = LocalDate.now()
                     .plusDays(1 + random.nextInt(rulesProperties.getDaysAhead()));
 
-            int openHour = rulesProperties.getOpenTime().getHour();
-            int closeHour = rulesProperties.getCloseTime().getHour();
+            LocalTime openTime = rulesProperties.getOpenTime();
+            LocalTime closeTime = rulesProperties.getCloseTime();
 
-            int slotHour = openHour + random.nextInt(Math.max(closeHour - openHour, 1));
-            int slotMinute = MINUTE_SLOTS[random.nextInt(MINUTE_SLOTS.length)];
+            int startHour = openTime.getHour()
+                    + random.nextInt(Math.max(closeTime.getHour() - openTime.getHour() + 1, 1));
 
-            LocalDateTime startTime = date.atTime(slotHour, slotMinute);
+            int startMinute = MINUTE_SLOTS[random.nextInt(MINUTE_SLOTS.length)];
+
+            if (startHour == openTime.getHour() && startMinute < openTime.getMinute()) {
+                startMinute = openTime.getMinute();
+            }
+
+            LocalDateTime startTime = date.atTime(startHour, startMinute);
 
             long minMinutes = rulesProperties.getMinDuration().toMinutes();
             long maxMinutes = rulesProperties.getMaxDuration().toMinutes();
