@@ -28,6 +28,10 @@ public class ReservationService {
             throw new IllegalArgumentException("Start time must be before end time");
         }
 
+        if (startTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Reservation cannot start in the past");
+        }
+
         RestaurantTable table = tableRepository.findById(tableId)
                 .orElseThrow(() -> new IllegalArgumentException("Table not found"));
 

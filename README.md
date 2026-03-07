@@ -126,6 +126,7 @@ http://localhost:8080/swagger-ui.html
 - Database tables and reservations are automatically reset and regenerated on application startup
 - Added configurable random reservation generator.  
   Reservation generation parameters are now externalized into `reservation-generator.properties`, allowing developers to control the number of generated reservations, client names, restaurant working hours, and visit durations without changing the code.
+- Added validation to prevent creating reservations in the past.
 
 ## Future Plans
 
