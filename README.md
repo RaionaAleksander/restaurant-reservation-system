@@ -135,6 +135,7 @@ http://localhost:8080/swagger-ui.html
 - Added validation to prevent reservations beyond allowed future days range.
 - Added validation for minimum and maximum reservation duration limits.
 - Added validation to ensure reservation times follow 15-minute scheduling slots.
+- Improved Swagger documentation with reservation rules description.
 
 ## Future Plans
 

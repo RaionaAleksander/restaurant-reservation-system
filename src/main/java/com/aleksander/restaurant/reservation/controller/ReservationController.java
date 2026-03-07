@@ -4,6 +4,8 @@ import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,13 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
+    @Operation(summary = "Create reservation", description = """
+                Create reservation respecting restaurant rules:
+                - Working hours
+                - Future date limits
+                - Duration limits
+                - 15-minute time slots
+            """)
     public Reservation createReservation(
             @Parameter(description = "Table ID") @RequestParam Long tableId,
 
