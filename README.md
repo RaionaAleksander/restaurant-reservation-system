@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 2.0 hours
+Total time spent: 3.5 hours
 
 ## Architecture
 
@@ -31,6 +31,56 @@ Controller → Service → Repository → Database
 - Controllers handle HTTP requests
 - Services contain business logic
 - Repositories handle database operations
+
+## Restaurant Layout
+
+The application uses a predefined restaurant layout loaded from `tables-config.json` during application startup.
+
+The restaurant contains **40 tables** distributed across different zones:
+
+- **Main Hall:** 22 tables  
+- **Terrace:** 12 tables  
+- **Private Rooms:** 6 tables  
+
+### Seating Capacity
+
+- Private room tables:
+  - 2 tables with capacity **5**
+  - 4 tables with capacity **6**
+- Main hall and terrace tables:
+  - Capacity between **1 and 4 guests**
+
+### Special Areas
+
+- A **kids zone** is present in the restaurant.
+- **4 tables** are located near the kids zone.
+
+### Coordinates
+
+Each table has spatial coordinates (`posX`, `posY`) representing its position in the restaurant layout.  
+These coordinates allow the system to support future features such as:
+
+- visual table layout
+- intelligent table recommendation
+- dynamic table grouping
+
+### Restaurant Layout Diagram
+
+Below is a conceptual layout of the restaurant:
+
+![Restaurant Layout](src/main/resources/restaurant-layout.png)
+
+### Layout Consistency Notice
+
+The restaurant layout is defined by two components:
+
+1. The layout image (`restaurant-layout.png`)
+2. The table configuration file (`tables-config.json`)
+
+The frontend renders tables on top of the layout image using the coordinates (`posX`, `posY`) defined in the configuration file.
+
+⚠️ If the restaurant layout is modified, both the image and the table configuration must be updated accordingly.
+Otherwise, table positions displayed in the UI may not match the actual layout.
 
 ## How to Run
 
@@ -70,6 +120,8 @@ http://localhost:8080/swagger-ui.html
 - Fixed infinite JSON recursion in bidirectional JPA relationship
 - Added Swagger parameter documentation
 - Fixed validation for reservation time intervals
+- Restaurant layout initialized from configuration file (tables-config.json)
+- DataInitializer implemented to automatically populate restaurant tables on application startup
 
 ## Future Plans
 
