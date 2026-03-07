@@ -35,8 +35,6 @@ public class DataInitializer implements CommandLineRunner {
     private final ReservationGeneratorProperties generatorProperties;
     private final ReservationRulesProperties rulesProperties;
 
-    private static final int[] MINUTE_SLOTS = { 0, 15, 30, 45 };
-
     @Override
     @Transactional
     public void run(String... args) throws Exception {
