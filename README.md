@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 6.5 hours
+Total time spent: 7 hours
 
 ## Architecture
 
@@ -132,6 +132,7 @@ http://localhost:8080/swagger-ui.html
 - Reservation generation now uses 15-minute time slots and respects restaurant working hours.
 - Fixed reservation time generation to respect restaurant opening minutes and 15-minute time slots.
 - Added validation to ensure reservations can only be created within restaurant working hours.
+- Added validation to prevent reservations beyond allowed future days range.
 
 ## Future Plans
 
