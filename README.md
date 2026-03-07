@@ -133,6 +133,7 @@ http://localhost:8080/swagger-ui.html
 - Fixed reservation time generation to respect restaurant opening minutes and 15-minute time slots.
 - Added validation to ensure reservations can only be created within restaurant working hours.
 - Added validation to prevent reservations beyond allowed future days range.
+- Added validation for minimum and maximum reservation duration limits.
 
 ## Future Plans
 

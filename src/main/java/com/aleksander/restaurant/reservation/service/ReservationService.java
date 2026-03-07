@@ -9,6 +9,7 @@ import com.aleksander.restaurant.reservation.repository.RestaurantTableRepositor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -48,6 +49,13 @@ public class ReservationService {
 
         if (startTime.toLocalDate().isAfter(maxDate)) {
             throw new IllegalArgumentException("Reservation date is too far in future");
+        }
+
+        long durationMinutes = Duration.between(startTime, endTime).toMinutes();
+
+        if (durationMinutes < rulesProperties.getMinDuration().toMinutes() ||
+                durationMinutes > rulesProperties.getMaxDuration().toMinutes()) {
+            throw new IllegalArgumentException("Invalid reservation duration");
         }
 
         RestaurantTable table = tableRepository.findById(tableId)
