@@ -131,6 +131,7 @@ http://localhost:8080/swagger-ui.html
   This file now contains restaurant business rules such as working hours, reservation duration limits, and reservation generation settings. Client names have been removed.
 - Reservation generation now uses 15-minute time slots and respects restaurant working hours.
 - Fixed reservation time generation to respect restaurant opening minutes and 15-minute time slots.
+- Added validation to ensure reservations can only be created within restaurant working hours.
 
 ## Future Plans
 

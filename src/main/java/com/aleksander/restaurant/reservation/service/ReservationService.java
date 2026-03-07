@@ -1,5 +1,6 @@
 package com.aleksander.restaurant.reservation.service;
 
+import com.aleksander.restaurant.reservation.config.ReservationRulesProperties;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.model.RestaurantTable;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -17,6 +19,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final RestaurantTableRepository tableRepository;
+    private final ReservationRulesProperties rulesProperties;
 
     public Reservation createReservation(Long tableId,
             String customerName,
@@ -30,6 +33,14 @@ public class ReservationService {
 
         if (startTime.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Reservation cannot start in the past");
+        }
+
+        LocalTime startTimeOnly = startTime.toLocalTime();
+        LocalTime endTimeOnly = endTime.toLocalTime();
+
+        if (startTimeOnly.isBefore(rulesProperties.getOpenTime()) ||
+                endTimeOnly.isAfter(rulesProperties.getCloseTime())) {
+            throw new IllegalArgumentException("Reservation must be within restaurant working hours");
         }
 
         RestaurantTable table = tableRepository.findById(tableId)
