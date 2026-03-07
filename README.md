@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 3.5 hours
+Total time spent: 4 hours
 
 ## Architecture
 
@@ -123,6 +123,7 @@ http://localhost:8080/swagger-ui.html
 - Restaurant layout initialized from configuration file (tables-config.json)
 - DataInitializer implemented to automatically populate restaurant tables on application startup
 - Random reservation generation added (50 reservations created on startup)
+- Database tables and reservations are automatically reset and regenerated on application startup
 
 ## Future Plans
 

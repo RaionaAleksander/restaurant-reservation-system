@@ -7,6 +7,9 @@ import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -24,15 +27,18 @@ public class DataInitializer implements CommandLineRunner {
 
     private final RestaurantTableRepository tableRepository;
     private final ReservationRepository reservationRepository;
+    private final EntityManager entityManager;
     private final ObjectMapper objectMapper;
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
 
-        if (tableRepository.count() > 0) {
-            return;
-        }
+        // Clear database (reservations, restaurant_tables)
+        entityManager.createNativeQuery(
+                "TRUNCATE TABLE reservations, restaurant_tables RESTART IDENTITY CASCADE").executeUpdate();
 
+        // Load table config
         InputStream inputStream = new ClassPathResource("tables-config.json").getInputStream();
 
         List<RestaurantTable> tables = objectMapper.readValue(inputStream,
