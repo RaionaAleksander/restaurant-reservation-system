@@ -122,6 +122,7 @@ http://localhost:8080/swagger-ui.html
 - Fixed validation for reservation time intervals
 - Restaurant layout initialized from configuration file (tables-config.json)
 - DataInitializer implemented to automatically populate restaurant tables on application startup
+- Random reservation generation added (50 reservations created on startup)
 
 ## Future Plans
 
