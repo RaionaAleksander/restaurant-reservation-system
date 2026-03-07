@@ -16,9 +16,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,25 +67,17 @@ public class DataInitializer implements CommandLineRunner {
         Random random = new Random();
         int created = 0;
 
+        List<LocalTime> timeSlots = generateTimeSlots(rulesProperties.getOpenTime(), rulesProperties.getCloseTime(),
+                rulesProperties.getMinDuration());
+
         while (created < targetReservations) {
             RestaurantTable table = tables.get(random.nextInt(tables.size()));
 
             LocalDate date = LocalDate.now()
                     .plusDays(1 + random.nextInt(rulesProperties.getDaysAhead()));
 
-            LocalTime openTime = rulesProperties.getOpenTime();
-            LocalTime closeTime = rulesProperties.getCloseTime();
-
-            int startHour = openTime.getHour()
-                    + random.nextInt(Math.max(closeTime.getHour() - openTime.getHour() + 1, 1));
-
-            int startMinute = MINUTE_SLOTS[random.nextInt(MINUTE_SLOTS.length)];
-
-            if (startHour == openTime.getHour() && startMinute < openTime.getMinute()) {
-                startMinute = openTime.getMinute();
-            }
-
-            LocalDateTime startTime = date.atTime(startHour, startMinute);
+            LocalTime startSlot = timeSlots.get(random.nextInt(timeSlots.size()));
+            LocalDateTime startTime = date.atTime(startSlot);
 
             long minMinutes = rulesProperties.getMinDuration().toMinutes();
             long maxMinutes = rulesProperties.getMaxDuration().toMinutes();
@@ -126,4 +120,19 @@ public class DataInitializer implements CommandLineRunner {
 
         System.out.println("Generated " + created + " random reservations");
     }
+
+    private List<LocalTime> generateTimeSlots(LocalTime openTime, LocalTime closeTime, Duration minDuration) {
+
+        List<LocalTime> slots = new ArrayList<>();
+        LocalTime current = openTime;
+        LocalTime lastPossibleStart = closeTime.minus(minDuration);
+
+        while (!current.isAfter(lastPossibleStart)) {
+            slots.add(current);
+            current = current.plusMinutes(15);
+        }
+
+        return slots;
+    }
+
 }
