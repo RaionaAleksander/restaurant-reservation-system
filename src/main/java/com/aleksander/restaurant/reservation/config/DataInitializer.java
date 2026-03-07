@@ -32,6 +32,8 @@ public class DataInitializer implements CommandLineRunner {
     private final ReservationGeneratorProperties generatorProperties;
     private final ReservationRulesProperties rulesProperties;
 
+    private static final int[] MINUTE_SLOTS = { 0, 15, 30, 45 };
+
     @Override
     @Transactional
     public void run(String... args) throws Exception {
@@ -71,16 +73,25 @@ public class DataInitializer implements CommandLineRunner {
             int openHour = rulesProperties.getOpenTime().getHour();
             int closeHour = rulesProperties.getCloseTime().getHour();
 
-            int startHour = openHour + random.nextInt(Math.max(closeHour - openHour - 1, 1));
+            int slotHour = openHour + random.nextInt(Math.max(closeHour - openHour, 1));
+            int slotMinute = MINUTE_SLOTS[random.nextInt(MINUTE_SLOTS.length)];
 
-            LocalDateTime startTime = date.atTime(startHour, 0);
+            LocalDateTime startTime = date.atTime(slotHour, slotMinute);
 
             long minMinutes = rulesProperties.getMinDuration().toMinutes();
             long maxMinutes = rulesProperties.getMaxDuration().toMinutes();
 
-            long durationMinutes = minMinutes + random.nextLong(maxMinutes - minMinutes + 1);
+            int minSlots = (int) (minMinutes / 15);
+            int maxSlots = (int) (maxMinutes / 15);
+
+            int durationSlots = minSlots + random.nextInt(maxSlots - minSlots + 1);
+            long durationMinutes = durationSlots * 15;
 
             LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
+
+            if (endTime.toLocalTime().isAfter(rulesProperties.getCloseTime())) {
+                continue;
+            }
 
             boolean conflict = reservationRepository
                     .findByTableId(table.getId())
@@ -89,10 +100,10 @@ public class DataInitializer implements CommandLineRunner {
                             endTime.isAfter(existing.getStartTime()));
 
             if (!conflict) {
-                String customerName = "Guest " + (created + 1);
+
                 Reservation reservation = Reservation.builder()
                         .table(table)
-                        .customerName(customerName)
+                        .customerName("Guest " + (created + 1))
                         .partySize(Math.min(
                                 table.getCapacity(),
                                 1 + random.nextInt(table.getCapacity())))
@@ -100,6 +111,7 @@ public class DataInitializer implements CommandLineRunner {
                         .endTime(endTime)
                         .status(ReservationStatus.ACTIVE)
                         .build();
+
                 reservationRepository.save(reservation);
                 created++;
             }
