@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 10 hours
+Total time spent: 10.5 hours
 
 ## Architecture
 
@@ -136,6 +136,25 @@ GET /api/tables?startTime=2026-03-12T18:00:00&endTime=2026-03-12T19:30:00
 
 GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
 
+### Cancel Reservation
+
+Cancel an existing reservation.
+
+Endpoint:
+
+PATCH /api/reservations/{id}/cancel
+
+Description:
+Changes reservation status from ACTIVE to CANCELLED.
+
+Rules:
+- Completed reservations cannot be cancelled.
+- If reservation does not exist, an error is returned.
+
+Example:
+
+PATCH /api/reservations/5/cancel
+
 ## Current Progress
 
 - Project setup completed
@@ -173,6 +192,7 @@ GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
 - Improved Swagger documentation for table filtering endpoint using ParameterObject.
 - Availability checks consider only ACTIVE reservations. Cancelled or completed reservations do not block table availability.
 - Refactored reservation time overlap logic into a shared utility method.
+- Added API endpoint to cancel reservations (PATCH /api/reservations/{id}/cancel).
 
 ## Future Plans
 

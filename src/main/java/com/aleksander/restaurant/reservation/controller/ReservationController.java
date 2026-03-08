@@ -3,6 +3,8 @@ package com.aleksander.restaurant.reservation.controller;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,5 +44,13 @@ public class ReservationController {
                 startTime,
                 endTime,
                 partySize);
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
+
+        reservationService.cancelReservation(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

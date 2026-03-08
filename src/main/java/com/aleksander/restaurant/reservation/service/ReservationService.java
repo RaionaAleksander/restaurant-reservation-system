@@ -8,6 +8,8 @@ import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
 import static com.aleksander.restaurant.reservation.util.ReservationTimeUtils.overlaps;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -92,5 +94,24 @@ public class ReservationService {
                 .build();
 
         return reservationRepository.save(reservation);
+    }
+
+    @Transactional
+    public void cancelReservation(Long reservationId) {
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Reservation not found with id: " + reservationId));
+
+        if (reservation.getStatus() == ReservationStatus.COMPLETED) {
+            throw new IllegalStateException("Completed reservation cannot be cancelled");
+        }
+
+        if (reservation.getStatus() == ReservationStatus.CANCELLED) {
+            throw new IllegalStateException("Reservation is already cancelled");
+        }
+
+        reservation.setStatus(ReservationStatus.CANCELLED);
+
+        reservationRepository.save(reservation);
     }
 }
