@@ -15,7 +15,7 @@ public class TableFilter {
     private Zone zone;
 
     private Boolean nearWindow;
-    private Boolean nearKidsRoom;
+    private Boolean nearKidsZone;
     private Boolean quietCorner;
     private Boolean accessible;
 

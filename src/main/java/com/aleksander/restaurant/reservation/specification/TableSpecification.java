@@ -23,8 +23,8 @@ public class TableSpecification {
         return (root, query, cb) -> nearWindow == null ? null : cb.equal(root.get("nearWindow"), nearWindow);
     }
 
-    public static Specification<RestaurantTable> nearKidsRoom(Boolean nearKidsRoom) {
-        return (root, query, cb) -> nearKidsRoom == null ? null : cb.equal(root.get("nearKidsRoom"), nearKidsRoom);
+    public static Specification<RestaurantTable> nearKidsZone(Boolean nearKidsZone) {
+        return (root, query, cb) -> nearKidsZone == null ? null : cb.equal(root.get("nearKidsZone"), nearKidsZone);
     }
 
     public static Specification<RestaurantTable> quietCorner(Boolean quietCorner) {

@@ -31,7 +31,7 @@ public class TableService {
         spec = spec.and(TableSpecification.hasMinCapacity(filter.getMinCapacity()));
         spec = spec.and(TableSpecification.hasZone(filter.getZone()));
         spec = spec.and(TableSpecification.nearWindow(filter.getNearWindow()));
-        spec = spec.and(TableSpecification.nearKidsRoom(filter.getNearKidsRoom()));
+        spec = spec.and(TableSpecification.nearKidsZone(filter.getNearKidsZone()));
         spec = spec.and(TableSpecification.quietCorner(filter.getQuietCorner()));
         spec = spec.and(TableSpecification.accessible(filter.getAccessible()));
 
