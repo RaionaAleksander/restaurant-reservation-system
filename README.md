@@ -193,6 +193,7 @@ PATCH /api/reservations/5/cancel
 - Availability checks consider only ACTIVE reservations. Cancelled or completed reservations do not block table availability.
 - Refactored reservation time overlap logic into a shared utility method.
 - Added API endpoint to cancel reservations (PATCH /api/reservations/{id}/cancel).
+- Added exception handling for IllegalStateException (409 Conflict) in reservation operations.
 
 ## Future Plans
 
