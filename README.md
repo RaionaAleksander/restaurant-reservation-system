@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 8.5 hours
+Total time spent: 9.5 hours
 
 ## Architecture
 
@@ -106,6 +106,36 @@ Application will start on: http://localhost:8080
 Swagger UI:
 http://localhost:8080/swagger-ui.html
 
+### Tables API
+
+Retrieve restaurant tables with flexible filtering.
+
+Endpoint:
+
+GET /api/tables
+
+Supported filters:
+
+capacity
+minCapacity
+zone
+nearWindow
+nearKidsRoom
+quietCorner
+accessible
+startTime
+endTime
+
+Examples:
+
+GET /api/tables?minCapacity=4
+
+GET /api/tables?zone=TERRACE&nearWindow=true
+
+GET /api/tables?startTime=2026-03-12T18:00:00&endTime=2026-03-12T19:30:00
+
+GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
+
 ## Current Progress
 
 - Project setup completed
@@ -139,6 +169,7 @@ http://localhost:8080/swagger-ui.html
 - Migrated configuration binding to `@ConfigurationPropertiesScan` following modern Spring Boot 3 practices.
 - Refactored reservation generator to use precomputed valid time slots.
 - Added GET /api/tables endpoint to retrieve restaurant table layout information.
+- Implemented dynamic table filtering using Spring Data JPA Specifications.
 
 ## Future Plans
 
