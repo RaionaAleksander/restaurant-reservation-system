@@ -170,6 +170,7 @@ GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
 - Refactored reservation generator to use precomputed valid time slots.
 - Added GET /api/tables endpoint to retrieve restaurant table layout information.
 - Implemented dynamic table filtering using Spring Data JPA Specifications.
+- Improved Swagger documentation for table filtering endpoint using ParameterObject.
 
 ## Future Plans
 
