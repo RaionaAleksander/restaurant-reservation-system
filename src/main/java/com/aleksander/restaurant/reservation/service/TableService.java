@@ -14,6 +14,7 @@ import com.aleksander.restaurant.reservation.model.RestaurantTable;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
 import com.aleksander.restaurant.reservation.specification.TableSpecification;
+import static com.aleksander.restaurant.reservation.util.ReservationTimeUtils.overlaps;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,8 +63,9 @@ public class TableService {
                 ReservationStatus.ACTIVE);
 
         return reservations.stream()
-                .noneMatch(reservation -> startTime.isBefore(reservation.getEndTime()) &&
-                        endTime.isAfter(reservation.getStartTime()));
+                .noneMatch(reservation -> overlaps(startTime, endTime,
+                        reservation.getStartTime(),
+                        reservation.getEndTime()));
     }
 
     private TableDTO mapToDto(RestaurantTable table) {

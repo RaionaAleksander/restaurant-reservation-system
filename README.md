@@ -172,6 +172,7 @@ GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
 - Implemented dynamic table filtering using Spring Data JPA Specifications.
 - Improved Swagger documentation for table filtering endpoint using ParameterObject.
 - Availability checks consider only ACTIVE reservations. Cancelled or completed reservations do not block table availability.
+- Refactored reservation time overlap logic into a shared utility method.
 
 ## Future Plans
 

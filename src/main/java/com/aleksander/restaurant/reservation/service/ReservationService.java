@@ -6,6 +6,7 @@ import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.model.RestaurantTable;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
+import static com.aleksander.restaurant.reservation.util.ReservationTimeUtils.overlaps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,8 +74,9 @@ public class ReservationService {
 
         for (Reservation existing : existingReservations) {
             if (existing.getStatus() == ReservationStatus.ACTIVE &&
-                    startTime.isBefore(existing.getEndTime()) &&
-                    endTime.isAfter(existing.getStartTime())) {
+                    overlaps(startTime, endTime,
+                            existing.getStartTime(),
+                            existing.getEndTime())) {
 
                 throw new IllegalArgumentException("Table is already reserved for this time slot");
             }
