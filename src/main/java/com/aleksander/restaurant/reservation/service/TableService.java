@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.aleksander.restaurant.reservation.dto.TableDTO;
 import com.aleksander.restaurant.reservation.dto.TableFilter;
 import com.aleksander.restaurant.reservation.model.Reservation;
+import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.model.RestaurantTable;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
@@ -56,7 +57,9 @@ public class TableService {
             RestaurantTable table,
             LocalDateTime startTime,
             LocalDateTime endTime) {
-        List<Reservation> reservations = reservationRepository.findByTableId(table.getId());
+        List<Reservation> reservations = reservationRepository.findByTableIdAndStatus(
+                table.getId(),
+                ReservationStatus.ACTIVE);
 
         return reservations.stream()
                 .noneMatch(reservation -> startTime.isBefore(reservation.getEndTime()) &&
