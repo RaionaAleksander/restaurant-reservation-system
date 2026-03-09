@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 11 hours
+Total time spent: 11.5 hours
 
 ## Architecture
 
@@ -101,6 +101,13 @@ mvn spring-boot:run (or ./mvnw spring-boot:run)
 
 Application will start on: http://localhost:8080
 
+## Documentation
+
+Project documentation is available in the `docs` folder:
+
+- Project changelog: `docs/CHANGELOG.md`
+- Project roadmap: `docs/ROADMAP.md`
+
 ## API Documentation
 
 Swagger UI:
@@ -153,52 +160,3 @@ Rules:
 Example:
 
 PATCH /api/reservations/5/cancel
-
-## Current Progress
-
-- Project setup completed
-- Database configured
-- RestaurantTable entity created
-- Reservation entity implemented
-- ReservationRepository created
-- ReservationService implemented with basic business validation
-- ReservationController created with POST endpoint
-- Reservation flow tested via Swagger
-- GlobalExceptionHandler added for proper API error responses (400 instead of 500)
-- Fixed infinite JSON recursion in bidirectional JPA relationship
-- Added Swagger parameter documentation
-- Fixed validation for reservation time intervals
-- Restaurant layout initialized from configuration file (tables-config.json)
-- DataInitializer implemented to automatically populate restaurant tables on application startup
-- Random reservation generation added (50 reservations created on startup)
-- Database tables and reservations are automatically reset and regenerated on application startup
-- Added configurable random reservation generator.  
-  Reservation generation parameters are now externalized into `reservation-generator.properties`, allowing developers to control the number of generated reservations, client names, restaurant working hours, and visit durations without changing the code.
-- Added validation to prevent creating reservations in the past.
-- Separated reservation configuration into a dedicated `reservation.properties` file.  
-  This file now contains restaurant business rules such as working hours, reservation duration limits, and reservation generation settings. Client names have been removed.
-- Reservation generation now uses 15-minute time slots and respects restaurant working hours.
-- Fixed reservation time generation to respect restaurant opening minutes and 15-minute time slots.
-- Added validation to ensure reservations can only be created within restaurant working hours.
-- Added validation to prevent reservations beyond allowed future days range.
-- Added validation for minimum and maximum reservation duration limits.
-- Added validation to ensure reservation times follow 15-minute scheduling slots.
-- Improved Swagger documentation with reservation rules description.
-- Migrated configuration binding to `@ConfigurationPropertiesScan` following modern Spring Boot 3 practices.
-- Refactored reservation generator to use precomputed valid time slots.
-- Added GET /api/tables endpoint to retrieve restaurant table layout information.
-- Implemented dynamic table filtering using Spring Data JPA Specifications.
-- Improved Swagger documentation for table filtering endpoint using ParameterObject.
-- Availability checks consider only ACTIVE reservations. Cancelled or completed reservations do not block table availability.
-- Refactored reservation time overlap logic into a shared utility method.
-- Added API endpoint to cancel reservations (PATCH /api/reservations/{id}/cancel).
-- Added exception handling for IllegalStateException (409 Conflict) in reservation operations.
-- Simplified table capacity filtering: capacity now represents minimum required seats.
-- Optimized table availability search by eliminating N+1 queries when checking reservations.
-
-## Future Plans
-
-- Implement table recommendation algorithm
-- Add visual restaurant layout
-- Add tests and Docker support
-- Implement admin interface
