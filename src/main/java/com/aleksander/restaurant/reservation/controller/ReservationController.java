@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -18,6 +19,12 @@ import java.time.LocalDateTime;
 public class ReservationController {
 
     private final ReservationService reservationService;
+
+    @GetMapping
+    @Operation(summary = "Get all reservations")
+    public List<Reservation> getAllReservations() {
+        return reservationService.getAllReservations();
+    }
 
     @PostMapping
     @Operation(summary = "Create reservation", description = """

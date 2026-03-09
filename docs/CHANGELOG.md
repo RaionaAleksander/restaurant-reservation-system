@@ -84,6 +84,7 @@ All notable changes to this project are documented here.
 - Added Swagger parameter documentation
 - Improved Swagger documentation using `ParameterObject`
 - Added API endpoint to cancel reservations (`PATCH /api/reservations/{id}/cancel`)
+- Added API endpoint to retrieve all reservations (`GET /api/reservations`)
 
 ---
 

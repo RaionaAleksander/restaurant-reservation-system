@@ -26,6 +26,10 @@ public class ReservationService {
     private final RestaurantTableRepository tableRepository;
     private final ReservationRulesProperties rulesProperties;
 
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+
     public Reservation createReservation(Long tableId,
             String customerName,
             LocalDateTime startTime,
