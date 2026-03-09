@@ -116,25 +116,24 @@ GET /api/tables
 
 Supported filters:
 
-capacity
-minCapacity
-zone
-nearWindow
-nearKidsRoom
-quietCorner
-accessible
-startTime
-endTime
+- capacity - minimum required number of seats at the table. Tables with larger capacity are also returned.
+- zone
+- nearWindow
+- nearKidsRoom
+- quietCorner
+- accessible
+- startTime
+- endTime
 
 Examples:
 
-GET /api/tables?minCapacity=4
+GET /api/tables?capacity=4
 
 GET /api/tables?zone=TERRACE&nearWindow=true
 
 GET /api/tables?startTime=2026-03-12T18:00:00&endTime=2026-03-12T19:30:00
 
-GET /api/tables?minCapacity=4&zone=MAIN_HALL&quietCorner=true
+GET /api/tables?capacity=4&zone=MAIN_HALL&quietCorner=true
 
 ### Cancel Reservation
 
@@ -194,6 +193,7 @@ PATCH /api/reservations/5/cancel
 - Refactored reservation time overlap logic into a shared utility method.
 - Added API endpoint to cancel reservations (PATCH /api/reservations/{id}/cancel).
 - Added exception handling for IllegalStateException (409 Conflict) in reservation operations.
+- Simplified table capacity filtering: capacity now represents minimum required seats.
 
 ## Future Plans
 

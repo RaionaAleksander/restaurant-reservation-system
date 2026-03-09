@@ -7,12 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 public class TableSpecification {
 
     public static Specification<RestaurantTable> hasCapacity(Integer capacity) {
-        return (root, query, cb) -> capacity == null ? null : cb.equal(root.get("capacity"), capacity);
-    }
-
-    public static Specification<RestaurantTable> hasMinCapacity(Integer minCapacity) {
-        return (root, query, cb) -> minCapacity == null ? null
-                : cb.greaterThanOrEqualTo(root.get("capacity"), minCapacity);
+        return (root, query, cb) -> capacity == null ? null
+                : cb.greaterThanOrEqualTo(root.get("capacity"), capacity);
     }
 
     public static Specification<RestaurantTable> hasZone(Zone zone) {

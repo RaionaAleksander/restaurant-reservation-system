@@ -10,7 +10,6 @@ import lombok.Data;
 public class TableFilter {
 
     private Integer capacity;
-    private Integer minCapacity;
 
     private Zone zone;
 

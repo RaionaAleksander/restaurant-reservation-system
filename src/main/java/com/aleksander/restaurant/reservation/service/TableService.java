@@ -30,7 +30,6 @@ public class TableService {
         Specification<RestaurantTable> spec = Specification.unrestricted();
 
         spec = spec.and(TableSpecification.hasCapacity(filter.getCapacity()));
-        spec = spec.and(TableSpecification.hasMinCapacity(filter.getMinCapacity()));
         spec = spec.and(TableSpecification.hasZone(filter.getZone()));
         spec = spec.and(TableSpecification.nearWindow(filter.getNearWindow()));
         spec = spec.and(TableSpecification.nearKidsZone(filter.getNearKidsZone()));
