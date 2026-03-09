@@ -2,6 +2,8 @@ package com.aleksander.restaurant.reservation.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -40,9 +42,15 @@ public class TableService {
 
         if (filter.getStartTime() != null && filter.getEndTime() != null) {
 
+            List<Reservation> activeReservations = reservationRepository.findByStatus(ReservationStatus.ACTIVE);
+
+            Map<Long, List<Reservation>> reservationsByTable = activeReservations.stream()
+                    .collect(Collectors.groupingBy(r -> r.getTable().getId()));
+
             tables = tables.stream()
                     .filter(table -> isTableAvailable(
                             table,
+                            reservationsByTable.get(table.getId()),
                             filter.getStartTime(),
                             filter.getEndTime()))
                     .toList();
@@ -55,11 +63,13 @@ public class TableService {
 
     private boolean isTableAvailable(
             RestaurantTable table,
+            List<Reservation> reservations,
             LocalDateTime startTime,
             LocalDateTime endTime) {
-        List<Reservation> reservations = reservationRepository.findByTableIdAndStatus(
-                table.getId(),
-                ReservationStatus.ACTIVE);
+
+        if (reservations == null || reservations.isEmpty()) {
+            return true;
+        }
 
         return reservations.stream()
                 .noneMatch(reservation -> overlaps(startTime, endTime,

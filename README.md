@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 10.5 hours
+Total time spent: 11 hours
 
 ## Architecture
 
@@ -194,6 +194,7 @@ PATCH /api/reservations/5/cancel
 - Added API endpoint to cancel reservations (PATCH /api/reservations/{id}/cancel).
 - Added exception handling for IllegalStateException (409 Conflict) in reservation operations.
 - Simplified table capacity filtering: capacity now represents minimum required seats.
+- Optimized table availability search by eliminating N+1 queries when checking reservations.
 
 ## Future Plans
 
