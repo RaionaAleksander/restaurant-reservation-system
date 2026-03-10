@@ -86,6 +86,7 @@ All notable changes to this project are documented here.
 - Added API endpoint to cancel reservations (`PATCH /api/reservations/{id}/cancel`)
 - Added API endpoint to retrieve all reservations (`GET /api/reservations`)
 - Introduced ReservationDTO and updated reservation API to return DTO instead of entity.
+- Added reservation filtering API using Spring Data JPA Specifications (status, date, customerName, tableNumber).
 
 ---
 

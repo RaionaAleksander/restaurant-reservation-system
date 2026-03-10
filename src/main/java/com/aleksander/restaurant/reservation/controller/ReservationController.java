@@ -1,10 +1,12 @@
 package com.aleksander.restaurant.reservation.controller;
 
 import com.aleksander.restaurant.reservation.dto.ReservationDTO;
+import com.aleksander.restaurant.reservation.dto.ReservationFilter;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,11 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping
-    @Operation(summary = "Get all reservations")
-    public List<ReservationDTO> getAllReservations() {
-        return reservationService.getAllReservations();
+    @Operation(summary = "Search reservations with optional filters")
+    public List<ReservationDTO> findReservations(
+            @ParameterObject ReservationFilter filter) {
+
+        return reservationService.findReservations(filter);
     }
 
     @PostMapping

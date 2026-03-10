@@ -24,6 +24,7 @@ Planned improvements for the next development phase:
 - Pagination for table search
 - Reservation update API
 - Reservation completion API
+- Pagination support for reservation search
 
 ---
 

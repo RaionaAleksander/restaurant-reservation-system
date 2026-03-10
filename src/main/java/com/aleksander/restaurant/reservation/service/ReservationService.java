@@ -2,15 +2,19 @@ package com.aleksander.restaurant.reservation.service;
 
 import com.aleksander.restaurant.reservation.config.ReservationRulesProperties;
 import com.aleksander.restaurant.reservation.dto.ReservationDTO;
+import com.aleksander.restaurant.reservation.dto.ReservationFilter;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.model.RestaurantTable;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
+import com.aleksander.restaurant.reservation.specification.ReservationSpecification;
+
 import static com.aleksander.restaurant.reservation.util.ReservationTimeUtils.overlaps;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -27,8 +31,15 @@ public class ReservationService {
     private final RestaurantTableRepository tableRepository;
     private final ReservationRulesProperties rulesProperties;
 
-    public List<ReservationDTO> getAllReservations() {
-        return reservationRepository.findAll()
+    public List<ReservationDTO> findReservations(ReservationFilter filter) {
+        Specification<Reservation> spec = Specification.unrestricted();
+
+        spec = spec.and(ReservationSpecification.hasStatus(filter.getStatus()));
+        spec = spec.and(ReservationSpecification.hasCustomerName(filter.getCustomerName()));
+        spec = spec.and(ReservationSpecification.hasTableNumber(filter.getTableNumber()));
+        spec = spec.and(ReservationSpecification.hasDate(filter.getDate()));
+
+        return reservationRepository.findAll(spec)
                 .stream()
                 .map(this::mapToDto)
                 .toList();
