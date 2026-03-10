@@ -1,6 +1,7 @@
 package com.aleksander.restaurant.reservation.service;
 
 import com.aleksander.restaurant.reservation.config.ReservationRulesProperties;
+import com.aleksander.restaurant.reservation.dto.ReservationDTO;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.model.RestaurantTable;
@@ -26,8 +27,24 @@ public class ReservationService {
     private final RestaurantTableRepository tableRepository;
     private final ReservationRulesProperties rulesProperties;
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationDTO> getAllReservations() {
+        return reservationRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    private ReservationDTO mapToDto(Reservation reservation) {
+        return ReservationDTO.builder()
+                .id(reservation.getId())
+                .tableId(reservation.getTable().getId())
+                .tableNumber(reservation.getTable().getTableNumber())
+                .customerName(reservation.getCustomerName())
+                .partySize(reservation.getPartySize())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .status(reservation.getStatus())
+                .build();
     }
 
     public Reservation createReservation(Long tableId,

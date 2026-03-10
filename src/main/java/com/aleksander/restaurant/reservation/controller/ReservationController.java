@@ -1,5 +1,6 @@
 package com.aleksander.restaurant.reservation.controller;
 
+import com.aleksander.restaurant.reservation.dto.ReservationDTO;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "Get all reservations")
-    public List<Reservation> getAllReservations() {
+    public List<ReservationDTO> getAllReservations() {
         return reservationService.getAllReservations();
     }
 
