@@ -18,6 +18,7 @@ import com.aleksander.restaurant.reservation.dto.table.TimeSlotDTO;
 import com.aleksander.restaurant.reservation.service.TableService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,7 +31,10 @@ public class TableController {
     @GetMapping
     public ResponseEntity<List<TableDTO>> getTables(
             @ParameterObject TableFilter filter,
-            @RequestParam(defaultValue = "false") boolean recommend) {
+
+            @Parameter(description = "Number of guests. Required when recommend=true", example = "4") @RequestParam(required = false) Integer capacity,
+
+            @Parameter(description = "Enable table recommendation ranking", example = "true") @RequestParam(defaultValue = "false") boolean recommend) {
 
         return ResponseEntity.ok(
                 tableService.findTables(filter, recommend));
