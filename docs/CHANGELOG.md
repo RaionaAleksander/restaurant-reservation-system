@@ -81,6 +81,14 @@ All notable changes to this project are documented here.
 
 ---
 
+## Table Recommendation System
+
+- Added recommendation scoring algorithm to table search API. When recommend=true, available tables are ranked based on capacity fit and preference attributes (zone, window proximity, quiet corner, kids zone, accessibility).
+- Refactored table recommendation logic by separating hard filters and preference-based scoring to improve recommendation accuracy.
+- Added validation to ensure capacity is provided when using recommendation mode to prevent invalid scoring calculations.
+
+---
+
 ## Performance Improvements
 
 - Optimized table availability search by eliminating N+1 queries

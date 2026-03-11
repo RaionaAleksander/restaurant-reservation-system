@@ -14,4 +14,5 @@ public class TableDTO {
     private Integer posX;
     private Integer posY;
 
+    private Integer score;
 }

@@ -35,19 +35,59 @@ public class TableService {
     private final ReservationRepository reservationRepository;
     private final ReservationRulesProperties rulesProperties;
 
-    public List<TableDTO> findTables(TableFilter filter) {
+    private int calculateScore(RestaurantTable table, TableFilter filter) {
+        int score = 0;
+
+        // Capacity is the most important factor, so we calculate a score based on how
+        // well the table capacity matches the requested party size
+        int capacityDiff = table.getCapacity() - filter.getCapacity();
+
+        if (capacityDiff < 0) {
+            return 0;
+        }
+
+        int capacityScore = 50 - capacityDiff * 5;
+
+        score += Math.max(capacityScore, 10);
+
+        if (Boolean.TRUE.equals(filter.getNearWindow()) && table.isNearWindow())
+            score += 10;
+        if (Boolean.TRUE.equals(filter.getQuietCorner()) && table.isQuietCorner())
+            score += 10;
+        if (Boolean.TRUE.equals(filter.getNearKidsZone()) && table.isNearKidsZone())
+            score += 5;
+        if (Boolean.TRUE.equals(filter.getAccessible()) && table.isAccessible())
+            score += 10;
+
+        if (filter.getZone() != null && table.getZone() == filter.getZone())
+            score += 5;
+
+        return score;
+    }
+
+    public List<TableDTO> findTables(TableFilter filter, boolean recommend) {
+
+        if (recommend && filter.getCapacity() == null) {
+            throw new IllegalArgumentException(
+                    "Capacity must be specified when using table recommendation");
+        }
 
         Specification<RestaurantTable> spec = Specification.unrestricted();
 
+        // Hard filters is capacity and zone - if they don't match, we don't want to
+        // consider the table at all
         spec = spec.and(TableSpecification.hasCapacity(filter.getCapacity()));
         spec = spec.and(TableSpecification.hasZone(filter.getZone()));
-        spec = spec.and(TableSpecification.nearWindow(filter.getNearWindow()));
-        spec = spec.and(TableSpecification.nearKidsZone(filter.getNearKidsZone()));
-        spec = spec.and(TableSpecification.quietCorner(filter.getQuietCorner()));
-        spec = spec.and(TableSpecification.accessible(filter.getAccessible()));
+        // Soft preferences is nearWindow, quietCorner, nearKidsZone, accessible - they
+        // will affect the score
+        // but won't exclude the table from results
 
         List<RestaurantTable> tables = tableRepository.findAll(spec);
 
+        List<RestaurantTable> filteredTables = tables;
+
+        // If time range is provided, we need to filter out tables that are not
+        // available in that time range
         if (filter.getStartTime() != null && filter.getEndTime() != null) {
 
             List<Reservation> activeReservations = reservationRepository.findByStatus(ReservationStatus.ACTIVE);
@@ -55,7 +95,7 @@ public class TableService {
             Map<Long, List<Reservation>> reservationsByTable = activeReservations.stream()
                     .collect(Collectors.groupingBy(r -> r.getTable().getId()));
 
-            tables = tables.stream()
+            filteredTables = tables.stream()
                     .filter(table -> isTableAvailable(
                             table,
                             reservationsByTable.get(table.getId()),
@@ -64,9 +104,27 @@ public class TableService {
                     .toList();
         }
 
-        return tables.stream()
+        List<TableDTO> dtos = filteredTables.stream()
                 .map(this::mapToDto)
                 .toList();
+
+        // If recommend is false, we return the filtered list without scores and sorting
+        if (!recommend) {
+            return dtos;
+        }
+
+        // If recommend is true, we calculate scores and sort by score
+        List<TableDTO> scoredTables = filteredTables.stream()
+                .map(table -> {
+                    TableDTO dto = mapToDto(table);
+                    dto.setScore(calculateScore(table, filter));
+                    return dto;
+                })
+                .filter(dto -> dto.getScore() > 0)
+                .sorted(Comparator.comparing(TableDTO::getScore).reversed())
+                .toList();
+
+        return scoredTables;
     }
 
     private boolean isTableAvailable(
