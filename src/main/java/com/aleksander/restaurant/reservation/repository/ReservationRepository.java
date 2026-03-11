@@ -24,9 +24,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
 
     long countByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 
+    long countByStatusAndStartTimeBetween(ReservationStatus status, LocalDateTime start, LocalDateTime end);
+
     @Query("SELECT r.startTime, COUNT(r) " +
             "FROM Reservation r " +
-            "WHERE r.startTime >= :from AND r.startTime < :to " +
+            "WHERE r.status = :status AND r.startTime >= :from AND r.startTime < :to " +
             "GROUP BY r.startTime")
-    List<Object[]> countReservationsGroupedByDate(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+    List<Object[]> countReservationsGroupedByDateAndStatus(
+            @Param("status") ReservationStatus status,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to);
 }

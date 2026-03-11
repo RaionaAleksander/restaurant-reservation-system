@@ -50,10 +50,10 @@ public class StatsService {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = LocalDate.now().plusDays(1).atStartOfDay();
 
-        long count = reservationRepository.findAll(
-                (root, query, cb) -> cb.equal(root.get("status"), ReservationStatus.COMPLETED)).stream()
-                .filter(r -> !r.getStartTime().isBefore(start) && r.getStartTime().isBefore(end))
-                .count();
+        long count = reservationRepository.countByStatusAndStartTimeBetween(
+                ReservationStatus.COMPLETED,
+                start,
+                end);
 
         return ReservationCountDTO.builder()
                 .days(days)
@@ -65,13 +65,15 @@ public class StatsService {
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.minusDays(days - 1);
 
-        List<Object[]> counts = reservationRepository.countReservationsGroupedByDate(startDate.atStartOfDay(),
+        List<Object[]> counts = reservationRepository.countReservationsGroupedByDateAndStatus(
+                ReservationStatus.COMPLETED,
+                startDate.atStartOfDay(),
                 today.plusDays(1).atStartOfDay());
 
         Map<LocalDate, Long> countsMap = counts.stream()
-                .collect(Collectors.toMap(
+                .collect(Collectors.groupingBy(
                         obj -> ((LocalDateTime) obj[0]).toLocalDate(),
-                        obj -> (Long) obj[1]));
+                        Collectors.summingLong(obj -> ((Long) obj[1]).longValue())));
 
         List<DailyReservationStatsDTO> result = new ArrayList<>();
         for (int i = 0; i < days; i++) {
