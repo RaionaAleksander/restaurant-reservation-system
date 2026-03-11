@@ -104,6 +104,7 @@ All notable changes to this project are documented here.
 - Added /api/stats/reservations endpoint with `days` parameter to get reservation count for the last N days.
 - Added /api/stats/reservations/daily?days= endpoint with `days` parameter to get daily reservation counts for the past N days
 - Added API endpoint to retrieve available reservation time slots for a specific table (`GET /api/tables/{tableNumber}/availability`) based on restaurant working hours and existing active reservations.
+- Fixed /api/stats/reservations to count only COMPLETED reservations for current day
 
 ---
 

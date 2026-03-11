@@ -50,7 +50,10 @@ public class StatsService {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = LocalDate.now().plusDays(1).atStartOfDay();
 
-        long count = reservationRepository.countByStartTimeBetween(start, end);
+        long count = reservationRepository.findAll(
+                (root, query, cb) -> cb.equal(root.get("status"), ReservationStatus.COMPLETED)).stream()
+                .filter(r -> !r.getStartTime().isBefore(start) && r.getStartTime().isBefore(end))
+                .count();
 
         return ReservationCountDTO.builder()
                 .days(days)
