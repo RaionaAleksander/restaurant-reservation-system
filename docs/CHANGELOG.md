@@ -116,6 +116,7 @@ All notable changes to this project are documented here.
 - Fixed /api/stats/reservations to count only COMPLETED reservations for current day
 - Refactored /api/stats/reservations and /api/stats/reservations/daily to filter COMPLETED reservations at repository level
 - Updated Swagger documentation to clarify that capacity parameter is required when using recommendation mode.
+- Added group/double reservation API (`POST /api/reservations/group`) allowing to reserve multiple tables simultaneously for the same customer and time slot. Introduced `parentReservationId` field in Reservation and ReservationDTO to link group reservations.
 
 ---
 

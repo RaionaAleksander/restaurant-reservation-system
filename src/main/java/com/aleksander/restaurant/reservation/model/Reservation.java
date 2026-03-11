@@ -36,4 +36,7 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus status;
+
+    @Column(nullable = true)
+    private Long parentReservationId;
 }

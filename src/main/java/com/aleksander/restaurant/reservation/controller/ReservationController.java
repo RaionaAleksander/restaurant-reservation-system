@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -65,5 +66,18 @@ public class ReservationController {
         reservationService.cancelReservation(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/group")
+    @Operation(summary = "Create group/double reservation")
+    public List<ReservationDTO> createGroupReservation(
+            @RequestParam List<Long> tableIds,
+            @RequestParam String customerName,
+            @RequestParam LocalDateTime startTime,
+            @RequestParam LocalDateTime endTime,
+            @RequestParam Integer partySize) {
+
+        return reservationService.createGroupReservation(
+                tableIds, customerName, startTime, endTime, partySize);
     }
 }

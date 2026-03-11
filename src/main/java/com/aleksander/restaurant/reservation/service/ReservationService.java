@@ -24,8 +24,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -150,5 +152,77 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.CANCELLED);
 
         reservationRepository.save(reservation);
+    }
+
+    @Transactional
+    public List<ReservationDTO> createGroupReservation(
+            List<Long> tableIds,
+            String customerName,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            Integer partySize) {
+
+        if (tableIds == null || tableIds.size() < 2) {
+            throw new IllegalArgumentException("At least two table IDs are required for group reservation");
+        }
+
+        if (!startTime.isBefore(endTime)) {
+            throw new IllegalArgumentException("Start time must be before end time");
+        }
+
+        if (startTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Reservation cannot start in the past");
+        }
+
+        Long parentId = null;
+
+        List<ReservationDTO> createdReservations = new ArrayList<>();
+
+        for (Long tableId : tableIds) {
+            RestaurantTable table = tableRepository.findById(Objects.requireNonNull(tableId))
+                    .orElseThrow(() -> new IllegalArgumentException("Table not found with id: " + tableId));
+
+            int totalCapacity = tableIds.stream()
+                    .map(tableRepository::findById)
+                    .filter(Optional::isPresent)
+                    .mapToInt(opt -> opt.get().getCapacity())
+                    .sum();
+
+            if (partySize > totalCapacity) {
+                throw new IllegalArgumentException("Party size exceeds total capacity of selected tables");
+            }
+
+            List<Reservation> existingReservations = reservationRepository.findByTableId(tableId);
+            boolean conflict = existingReservations.stream()
+                    .anyMatch(r -> r.getStatus() == ReservationStatus.ACTIVE &&
+                            overlaps(startTime, endTime, r.getStartTime(), r.getEndTime()));
+
+            if (conflict) {
+                throw new IllegalArgumentException(
+                        "Table " + table.getTableNumber() + " is already reserved for this time slot");
+            }
+
+            Reservation reservation = Reservation.builder()
+                    .table(table)
+                    .customerName(customerName)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .partySize(partySize)
+                    .status(ReservationStatus.ACTIVE)
+                    .parentReservationId(parentId)
+                    .build();
+
+            reservationRepository.save(Objects.requireNonNull(reservation));
+
+            if (parentId == null) {
+                parentId = reservation.getId();
+                reservation.setParentReservationId(parentId);
+                reservationRepository.save(reservation);
+            }
+
+            createdReservations.add(mapToDto(reservation));
+        }
+
+        return createdReservations;
     }
 }

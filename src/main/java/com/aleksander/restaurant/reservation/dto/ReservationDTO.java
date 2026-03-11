@@ -23,4 +23,6 @@ public class ReservationDTO {
     private LocalDateTime endTime;
 
     private ReservationStatus status;
+
+    private Long parentReservationId;
 }
