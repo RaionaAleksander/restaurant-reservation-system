@@ -95,6 +95,7 @@ All notable changes to this project are documented here.
 - Introduced a generic PageResponse<T> wrapper for paginated API responses and applied it to the reservation search endpoint.
 - Added factory method in PageResponse to simplify conversion from Spring Page to API response.
 - Updated reservation creation endpoint to return ReservationDTO instead of entity.
+- Added statistics endpoint (GET /api/stats) returning total counts of tables and reservations.
 
 ---
 
