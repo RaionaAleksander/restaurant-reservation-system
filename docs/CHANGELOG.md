@@ -51,6 +51,10 @@ All notable changes to this project are documented here.
 - Reservation generation parameters externalized into `reservation-generator.properties`
 - Separated reservation configuration into `reservation.properties`
 - Migrated configuration binding to `@ConfigurationPropertiesScan` (Spring Boot 3 best practice)
+- Configured default pagination settings for Spring Data Web:
+  - Default page size: 20
+  - Maximum page size: 100
+  - Page indexing starts from 0 (`one-indexed-parameters=false`)
 
 ---
 
