@@ -58,6 +58,7 @@ All notable changes to this project are documented here.
   - Default page size: 20
   - Maximum page size: 100
   - Page indexing starts from 0 (`one-indexed-parameters=false`)
+- Added global CORS configuration to allow frontend access from http://localhost:3000
 
 ---
 
