@@ -7,4 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "reservation.generator")
 public class ReservationGeneratorProperties {
     private int count;
+    private int countCompleted;
 }

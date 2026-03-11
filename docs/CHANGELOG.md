@@ -67,6 +67,7 @@ All notable changes to this project are documented here.
 - Reservation generation respects restaurant working hours
 - Fixed reservation time generation to respect opening minutes
 - Refactored reservation generator to use precomputed valid time slots
+- Added generation of completed (past) reservations with status COMPLETED
 
 ---
 
