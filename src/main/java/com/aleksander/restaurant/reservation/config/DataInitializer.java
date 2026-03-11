@@ -55,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
                 new TypeReference<List<RestaurantTable>>() {
                 });
 
-        tableRepository.saveAll(tables);
+        tableRepository.saveAll(Objects.requireNonNull(tables));
 
         generateRandomReservations(tables);
     }
@@ -131,7 +131,7 @@ public class DataInitializer implements CommandLineRunner {
                     .status(ReservationStatus.ACTIVE)
                     .build();
 
-            reservationRepository.save(reservation);
+            reservationRepository.save(Objects.requireNonNull(reservation));
 
             updateAvailability(slots, slot, startTime, endTime);
 

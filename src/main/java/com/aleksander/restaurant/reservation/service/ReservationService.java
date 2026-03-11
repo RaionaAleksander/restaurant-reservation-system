@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class ReservationService {
         spec = spec.and(ReservationSpecification.hasTableNumber(filter.getTableNumber()));
         spec = spec.and(ReservationSpecification.hasDate(filter.getDate()));
 
-        Page<Reservation> pageResult = reservationRepository.findAll(spec, pageable);
+        Page<Reservation> pageResult = reservationRepository.findAll(spec, Objects.requireNonNull(pageable));
 
         return PageResponse.from(pageResult, this::mapToDto);
     }
@@ -99,7 +100,7 @@ public class ReservationService {
             throw new IllegalArgumentException("Reservation time must be in 15-minute intervals");
         }
 
-        RestaurantTable table = tableRepository.findById(tableId)
+        RestaurantTable table = tableRepository.findById(Objects.requireNonNull(tableId))
                 .orElseThrow(() -> new IllegalArgumentException("Table not found"));
 
         if (partySize > table.getCapacity()) {
@@ -127,7 +128,7 @@ public class ReservationService {
                 .status(ReservationStatus.ACTIVE)
                 .build();
 
-        reservationRepository.save(reservation);
+        reservationRepository.save(Objects.requireNonNull(reservation));
 
         return mapToDto(reservation);
     }
@@ -135,7 +136,7 @@ public class ReservationService {
     @Transactional
     public void cancelReservation(Long reservationId) {
 
-        Reservation reservation = reservationRepository.findById(reservationId)
+        Reservation reservation = reservationRepository.findById(Objects.requireNonNull(reservationId))
                 .orElseThrow(() -> new IllegalArgumentException("Reservation not found with id: " + reservationId));
 
         if (reservation.getStatus() == ReservationStatus.COMPLETED) {
