@@ -60,7 +60,7 @@ public class ReservationService {
                 .build();
     }
 
-    public Reservation createReservation(Long tableId,
+    public ReservationDTO createReservation(Long tableId,
             String customerName,
             LocalDateTime startTime,
             LocalDateTime endTime,
@@ -127,7 +127,9 @@ public class ReservationService {
                 .status(ReservationStatus.ACTIVE)
                 .build();
 
-        return reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
+
+        return mapToDto(reservation);
     }
 
     @Transactional

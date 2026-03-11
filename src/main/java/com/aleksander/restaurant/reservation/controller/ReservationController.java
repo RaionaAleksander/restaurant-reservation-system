@@ -3,7 +3,6 @@ package com.aleksander.restaurant.reservation.controller;
 import com.aleksander.restaurant.reservation.dto.PageResponse;
 import com.aleksander.restaurant.reservation.dto.ReservationDTO;
 import com.aleksander.restaurant.reservation.dto.ReservationFilter;
-import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +40,7 @@ public class ReservationController {
                 - Duration limits
                 - 15-minute time slots
             """)
-    public Reservation createReservation(
+    public ReservationDTO createReservation(
             @Parameter(description = "Table ID") @RequestParam Long tableId,
 
             @Parameter(description = "Customer name") @RequestParam String customerName,
