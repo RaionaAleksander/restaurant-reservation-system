@@ -93,6 +93,7 @@ All notable changes to this project are documented here.
 - Added reservation filtering API using Spring Data JPA Specifications (status, date, customerName, tableNumber).
 - Added pagination support (page, size) to reservation search API.
 - Introduced a generic PageResponse<T> wrapper for paginated API responses and applied it to the reservation search endpoint.
+- Added factory method in PageResponse to simplify conversion from Spring Page to API response.
 
 ---
 

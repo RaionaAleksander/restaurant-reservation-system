@@ -44,19 +44,7 @@ public class ReservationService {
 
         Page<Reservation> pageResult = reservationRepository.findAll(spec, pageable);
 
-        List<ReservationDTO> content = pageResult
-                .getContent()
-                .stream()
-                .map(this::mapToDto)
-                .toList();
-
-        return PageResponse.<ReservationDTO>builder()
-                .content(content)
-                .page(pageResult.getNumber())
-                .size(pageResult.getSize())
-                .totalElements(pageResult.getTotalElements())
-                .totalPages(pageResult.getTotalPages())
-                .build();
+        return PageResponse.from(pageResult, this::mapToDto);
     }
 
     private ReservationDTO mapToDto(Reservation reservation) {
