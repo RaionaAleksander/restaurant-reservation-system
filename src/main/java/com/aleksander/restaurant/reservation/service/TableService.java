@@ -82,6 +82,13 @@ public class TableService {
         // will affect the score
         // but won't exclude the table from results
 
+        if (!recommend) {
+            spec = spec.and(TableSpecification.nearWindow(filter.getNearWindow()));
+            spec = spec.and(TableSpecification.nearKidsZone(filter.getNearKidsZone()));
+            spec = spec.and(TableSpecification.quietCorner(filter.getQuietCorner()));
+            spec = spec.and(TableSpecification.accessible(filter.getAccessible()));
+        }
+
         List<RestaurantTable> tables = tableRepository.findAll(spec);
 
         List<RestaurantTable> filteredTables = tables;
