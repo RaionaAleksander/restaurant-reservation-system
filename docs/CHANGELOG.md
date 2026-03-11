@@ -97,6 +97,7 @@ All notable changes to this project are documented here.
 - Updated reservation creation endpoint to return ReservationDTO instead of entity.
 - Added statistics endpoint (GET /api/stats) returning total counts of tables and reservations.
 - Extended Stats API (Dashboard) to include: total tables, total reservations, active, cancelled, and today's reservations.
+- Added /api/stats/reservations endpoint with `days` parameter to get reservation count for the last N days.
 
 ---
 

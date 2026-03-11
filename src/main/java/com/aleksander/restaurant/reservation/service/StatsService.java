@@ -1,9 +1,11 @@
 package com.aleksander.restaurant.reservation.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import com.aleksander.restaurant.reservation.dto.stats.ReservationCountDTO;
 import com.aleksander.restaurant.reservation.dto.stats.RestaurantStatsDTO;
 import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
@@ -35,6 +37,19 @@ public class StatsService {
                 .activeReservations(activeReservations)
                 .cancelledReservations(cancelledReservations)
                 .todayReservations(todayReservations)
+                .build();
+    }
+
+    public ReservationCountDTO getReservationsCountLastNDays(int days) {
+        LocalDate startDate = LocalDate.now().minusDays(days - 1);
+        LocalDateTime start = startDate.atStartOfDay();
+        LocalDateTime end = LocalDate.now().plusDays(1).atStartOfDay();
+
+        long count = reservationRepository.countByStartTimeBetween(start, end);
+
+        return ReservationCountDTO.builder()
+                .days(days)
+                .reservationsCount(count)
                 .build();
     }
 }
