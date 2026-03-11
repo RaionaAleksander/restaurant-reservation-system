@@ -97,9 +97,7 @@ public class TableService {
     }
 
     public Map<LocalDate, List<TimeSlotDTO>> getTableAvailability(Integer tableNumber) {
-        RestaurantTable table = tableRepository.findAll().stream()
-                .filter(t -> t.getTableNumber().equals(tableNumber))
-                .findFirst()
+        RestaurantTable table = tableRepository.findByTableNumber(tableNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Table not found: " + tableNumber));
 
         List<Reservation> reservations = table.getReservations().stream()
