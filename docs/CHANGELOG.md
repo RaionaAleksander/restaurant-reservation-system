@@ -68,6 +68,7 @@ All notable changes to this project are documented here.
 - Fixed reservation time generation to respect opening minutes
 - Refactored reservation generator to use precomputed valid time slots
 - Added generation of completed (past) reservations with status COMPLETED
+- Added configuration for past completed reservations: `reservation.generator.past-days` for number of past days to generate
 
 ---
 

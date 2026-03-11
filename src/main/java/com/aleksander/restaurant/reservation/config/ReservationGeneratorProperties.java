@@ -8,4 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ReservationGeneratorProperties {
     private int count;
     private int countCompleted;
+    private int pastDays;
 }

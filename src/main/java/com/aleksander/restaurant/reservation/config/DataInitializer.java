@@ -271,7 +271,7 @@ public class DataInitializer implements CommandLineRunner {
     private Map<Long, Map<LocalDate, List<FreeSlot>>> buildAvailabilityForPast(List<RestaurantTable> tables) {
         Map<Long, Map<LocalDate, List<FreeSlot>>> availability = new HashMap<>();
         LocalDate today = LocalDate.now();
-        int pastDays = 10;
+        int pastDays = generatorProperties.getPastDays();
 
         for (RestaurantTable table : tables) {
             Map<LocalDate, List<FreeSlot>> tableDays = new HashMap<>();
