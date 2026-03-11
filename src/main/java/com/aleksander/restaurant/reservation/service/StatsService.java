@@ -1,8 +1,11 @@
 package com.aleksander.restaurant.reservation.service;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Service;
 
-import com.aleksander.restaurant.reservation.dto.RestaurantStatsDTO;
+import com.aleksander.restaurant.reservation.dto.stats.RestaurantStatsDTO;
+import com.aleksander.restaurant.reservation.model.ReservationStatus;
 import com.aleksander.restaurant.reservation.repository.ReservationRepository;
 import com.aleksander.restaurant.reservation.repository.RestaurantTableRepository;
 
@@ -15,14 +18,23 @@ public class StatsService {
     private final RestaurantTableRepository tableRepository;
     private final ReservationRepository reservationRepository;
 
-    public RestaurantStatsDTO getStats() {
+    public RestaurantStatsDTO getDashboardStats() {
+        long totalTables = tableRepository.count();
+        long totalReservations = reservationRepository.count();
+        long activeReservations = reservationRepository.countByStatus(ReservationStatus.ACTIVE);
+        long cancelledReservations = reservationRepository.countByStatus(ReservationStatus.CANCELLED);
 
-        long tableCount = tableRepository.count();
-        long reservationCount = reservationRepository.count();
+        LocalDate today = LocalDate.now();
+        long todayReservations = reservationRepository.countByStartTimeBetween(
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay());
 
         return RestaurantStatsDTO.builder()
-                .tables(tableCount)
-                .reservations(reservationCount)
+                .totalTables(totalTables)
+                .totalReservations(totalReservations)
+                .activeReservations(activeReservations)
+                .cancelledReservations(cancelledReservations)
+                .todayReservations(todayReservations)
                 .build();
     }
 }

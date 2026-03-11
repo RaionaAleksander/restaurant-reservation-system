@@ -4,9 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aleksander.restaurant.reservation.dto.RestaurantStatsDTO;
+import com.aleksander.restaurant.reservation.dto.stats.RestaurantStatsDTO;
 import com.aleksander.restaurant.reservation.service.StatsService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -17,7 +18,8 @@ public class StatsController {
     private final StatsService statsService;
 
     @GetMapping
-    public RestaurantStatsDTO getStats() {
-        return statsService.getStats();
+    @Operation(summary = "Dashboard stats", description = "Returns general restaurant statistics: total tables, total reservations, active reservations, cancelled reservations, today's reservations.")
+    public RestaurantStatsDTO getDashboardStats() {
+        return statsService.getDashboardStats();
     }
 }

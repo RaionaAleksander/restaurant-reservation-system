@@ -3,6 +3,7 @@ package com.aleksander.restaurant.reservation.repository;
 import com.aleksander.restaurant.reservation.model.Reservation;
 import com.aleksander.restaurant.reservation.model.ReservationStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
     List<Reservation> findByTableIdAndStatus(Long tableId, ReservationStatus status);
 
     List<Reservation> findByStatus(ReservationStatus status);
+
+    long countByStatus(ReservationStatus status);
+
+    long countByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 }

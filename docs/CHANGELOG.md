@@ -96,6 +96,7 @@ All notable changes to this project are documented here.
 - Added factory method in PageResponse to simplify conversion from Spring Page to API response.
 - Updated reservation creation endpoint to return ReservationDTO instead of entity.
 - Added statistics endpoint (GET /api/stats) returning total counts of tables and reservations.
+- Extended Stats API (Dashboard) to include: total tables, total reservations, active, cancelled, and today's reservations.
 
 ---
 
