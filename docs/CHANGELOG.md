@@ -42,6 +42,9 @@ All notable changes to this project are documented here.
 - DataInitializer implemented to populate restaurant tables on application startup
 - Random reservation generation added (50 reservations on startup)
 - Database tables and reservations automatically reset and regenerated on startup
+- Optimized random reservation generation using internal table availability structure to avoid repeated conflict checks.
+- Added support for generating reservations starting from the current day if sufficient time remains before restaurant closing.
+- Improved performance of reservation generator for larger datasets.
 
 ---
 

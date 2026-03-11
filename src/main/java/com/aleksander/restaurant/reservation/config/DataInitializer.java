@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
@@ -21,7 +23,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 @Component
@@ -52,33 +57,49 @@ public class DataInitializer implements CommandLineRunner {
 
         tableRepository.saveAll(tables);
 
-        generateRandomReservations();
+        generateRandomReservations(tables);
     }
 
-    private void generateRandomReservations() {
+    private void generateRandomReservations(List<RestaurantTable> tables) {
 
         int targetReservations = generatorProperties.getCount();
         if (targetReservations <= 0)
             return;
 
-        List<RestaurantTable> tables = tableRepository.findAll();
         Random random = new Random();
         int created = 0;
 
-        List<LocalTime> timeSlots = generateTimeSlots(rulesProperties.getOpenTime(), rulesProperties.getCloseTime(),
-                rulesProperties.getMinDuration());
+        Map<Long, Map<LocalDate, List<FreeSlot>>> availability = initializeAvailability(tables);
 
         while (created < targetReservations) {
+
             RestaurantTable table = tables.get(random.nextInt(tables.size()));
 
-            LocalDate date = LocalDate.now()
-                    .plusDays(1 + random.nextInt(rulesProperties.getDaysAhead()));
+            Map<LocalDate, List<FreeSlot>> tableDays = availability.get(table.getId());
 
-            LocalTime startSlot = timeSlots.get(random.nextInt(timeSlots.size()));
-            LocalDateTime startTime = date.atTime(startSlot);
+            if (tableDays.isEmpty())
+                continue;
+
+            List<LocalDate> dates = new ArrayList<>(tableDays.keySet());
+
+            LocalDate date = dates.get(random.nextInt(dates.size()));
+
+            List<FreeSlot> slots = tableDays.get(date);
+
+            if (slots == null || slots.isEmpty())
+                continue;
+
+            FreeSlot slot = slots.get(random.nextInt(slots.size()));
+
+            long slotMinutes = Duration.between(slot.getStart(), slot.getEnd()).toMinutes();
+
+            if (slotMinutes < rulesProperties.getMinDuration().toMinutes()) {
+                slots.remove(slot);
+                continue;
+            }
 
             long minMinutes = rulesProperties.getMinDuration().toMinutes();
-            long maxMinutes = rulesProperties.getMaxDuration().toMinutes();
+            long maxMinutes = Math.min(rulesProperties.getMaxDuration().toMinutes(), slotMinutes);
 
             int minSlots = (int) (minMinutes / 15);
             int maxSlots = (int) (maxMinutes / 15);
@@ -86,51 +107,122 @@ public class DataInitializer implements CommandLineRunner {
             int durationSlots = minSlots + random.nextInt(maxSlots - minSlots + 1);
             long durationMinutes = durationSlots * 15;
 
+            long maxStartOffset = slotMinutes - durationMinutes;
+            int offsetSlots = 0;
+            if (maxStartOffset > 0) {
+                offsetSlots = random.nextInt((int) (maxStartOffset / 15) + 1);
+            }
+
+            LocalDateTime startTime = slot.getStart().plusMinutes(offsetSlots * 15);
             LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
 
-            if (endTime.toLocalTime().isAfter(rulesProperties.getCloseTime())) {
+            if (endTime.isAfter(slot.getEnd())) {
                 continue;
             }
 
-            boolean conflict = reservationRepository
-                    .findByTableId(table.getId())
-                    .stream()
-                    .anyMatch(existing -> startTime.isBefore(existing.getEndTime()) &&
-                            endTime.isAfter(existing.getStartTime()));
+            Reservation reservation = Reservation.builder()
+                    .table(table)
+                    .customerName("Guest " + (created + 1))
+                    .partySize(Math.min(
+                            table.getCapacity(),
+                            1 + random.nextInt(table.getCapacity())))
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .status(ReservationStatus.ACTIVE)
+                    .build();
 
-            if (!conflict) {
+            reservationRepository.save(reservation);
 
-                Reservation reservation = Reservation.builder()
-                        .table(table)
-                        .customerName("Guest " + (created + 1))
-                        .partySize(Math.min(
-                                table.getCapacity(),
-                                1 + random.nextInt(table.getCapacity())))
-                        .startTime(startTime)
-                        .endTime(endTime)
-                        .status(ReservationStatus.ACTIVE)
-                        .build();
+            updateAvailability(slots, slot, startTime, endTime);
 
-                reservationRepository.save(reservation);
-                created++;
-            }
+            created++;
         }
 
         System.out.println("Generated " + created + " random reservations");
     }
 
-    private List<LocalTime> generateTimeSlots(LocalTime openTime, LocalTime closeTime, Duration minDuration) {
+    private Map<Long, Map<LocalDate, List<FreeSlot>>> initializeAvailability(
+            List<RestaurantTable> tables) {
 
-        List<LocalTime> slots = new ArrayList<>();
-        LocalTime current = openTime;
-        LocalTime lastPossibleStart = closeTime.minus(minDuration);
+        Map<Long, Map<LocalDate, List<FreeSlot>>> availability = new HashMap<>();
 
-        while (!current.isAfter(lastPossibleStart)) {
-            slots.add(current);
-            current = current.plusMinutes(15);
+        LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+
+        int daysAhead = rulesProperties.getDaysAhead();
+
+        LocalTime openTime = rulesProperties.getOpenTime();
+        LocalTime closeTime = rulesProperties.getCloseTime();
+
+        for (RestaurantTable table : tables) {
+
+            Map<LocalDate, List<FreeSlot>> tableDays = new HashMap<>();
+
+            for (int i = 0; i <= daysAhead; i++) {
+
+                LocalDate date = today.plusDays(i);
+
+                LocalDateTime start = date.atTime(openTime);
+                LocalDateTime end = date.atTime(closeTime);
+
+                if (date.equals(today)) {
+
+                    if (now.isAfter(end.minusMinutes(30))) {
+                        continue;
+                    }
+
+                    if (now.isAfter(start)) {
+                        LocalDateTime adjustedNow = now.withSecond(0).withNano(0);
+
+                        int remainder = adjustedNow.getMinute() % 15;
+
+                        if (remainder != 0) {
+                            adjustedNow = now.plusMinutes(15 - remainder);
+                        }
+
+                        start = adjustedNow;
+                    }
+                }
+
+                tableDays.put(
+                        date,
+                        new ArrayList<>(List.of(new FreeSlot(start, end))));
+            }
+
+            availability.put(table.getId(), tableDays);
         }
 
-        return slots;
+        return availability;
     }
 
+    private void updateAvailability(
+            List<FreeSlot> slots,
+            FreeSlot original,
+            LocalDateTime reservationStart,
+            LocalDateTime reservationEnd) {
+
+        slots.remove(original);
+
+        if (original.getStart().isBefore(reservationStart)) {
+
+            slots.add(new FreeSlot(
+                    original.getStart(),
+                    reservationStart));
+        }
+
+        if (reservationEnd.isBefore(original.getEnd())) {
+
+            slots.add(new FreeSlot(
+                    reservationEnd,
+                    original.getEnd()));
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    private static class FreeSlot {
+
+        private LocalDateTime start;
+        private LocalDateTime end;
+    }
 }
