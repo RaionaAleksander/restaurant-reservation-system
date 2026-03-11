@@ -1,6 +1,7 @@
 package com.aleksander.restaurant.reservation.service;
 
 import com.aleksander.restaurant.reservation.config.ReservationRulesProperties;
+import com.aleksander.restaurant.reservation.dto.PageResponse;
 import com.aleksander.restaurant.reservation.dto.ReservationDTO;
 import com.aleksander.restaurant.reservation.dto.ReservationFilter;
 import com.aleksander.restaurant.reservation.model.Reservation;
@@ -14,6 +15,7 @@ import static com.aleksander.restaurant.reservation.util.ReservationTimeUtils.ov
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class ReservationService {
     private final RestaurantTableRepository tableRepository;
     private final ReservationRulesProperties rulesProperties;
 
-    public List<ReservationDTO> findReservations(ReservationFilter filter, Pageable pageable) {
+    public PageResponse<ReservationDTO> findReservations(ReservationFilter filter, Pageable pageable) {
         Specification<Reservation> spec = Specification.unrestricted();
 
         spec = spec.and(ReservationSpecification.hasStatus(filter.getStatus()));
@@ -40,11 +42,21 @@ public class ReservationService {
         spec = spec.and(ReservationSpecification.hasTableNumber(filter.getTableNumber()));
         spec = spec.and(ReservationSpecification.hasDate(filter.getDate()));
 
-        return reservationRepository.findAll(spec, pageable)
+        Page<Reservation> pageResult = reservationRepository.findAll(spec, pageable);
+
+        List<ReservationDTO> content = pageResult
                 .getContent()
                 .stream()
                 .map(this::mapToDto)
                 .toList();
+
+        return PageResponse.<ReservationDTO>builder()
+                .content(content)
+                .page(pageResult.getNumber())
+                .size(pageResult.getSize())
+                .totalElements(pageResult.getTotalElements())
+                .totalPages(pageResult.getTotalPages())
+                .build();
     }
 
     private ReservationDTO mapToDto(Reservation reservation) {

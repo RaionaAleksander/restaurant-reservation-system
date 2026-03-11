@@ -1,5 +1,6 @@
 package com.aleksander.restaurant.reservation.controller;
 
+import com.aleksander.restaurant.reservation.dto.PageResponse;
 import com.aleksander.restaurant.reservation.dto.ReservationDTO;
 import com.aleksander.restaurant.reservation.dto.ReservationFilter;
 import com.aleksander.restaurant.reservation.model.Reservation;
@@ -15,7 +16,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -26,7 +26,7 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "Search reservations with optional filters and pagination")
-    public List<ReservationDTO> findReservations(
+    public PageResponse<ReservationDTO> findReservations(
             @ParameterObject ReservationFilter filter,
             @ParameterObject Pageable pageable) {
 
