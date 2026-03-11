@@ -7,6 +7,7 @@ import com.aleksander.restaurant.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,12 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping
-    @Operation(summary = "Search reservations with optional filters")
+    @Operation(summary = "Search reservations with optional filters and pagination")
     public List<ReservationDTO> findReservations(
-            @ParameterObject ReservationFilter filter) {
+            @ParameterObject ReservationFilter filter,
+            @ParameterObject Pageable pageable) {
 
-        return reservationService.findReservations(filter);
+        return reservationService.findReservations(filter, pageable);
     }
 
     @PostMapping
