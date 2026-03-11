@@ -1,10 +1,13 @@
 package com.aleksander.restaurant.reservation.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aleksander.restaurant.reservation.dto.stats.DailyReservationStatsDTO;
 import com.aleksander.restaurant.reservation.dto.stats.ReservationCountDTO;
 import com.aleksander.restaurant.reservation.dto.stats.RestaurantStatsDTO;
 import com.aleksander.restaurant.reservation.service.StatsService;
@@ -30,5 +33,12 @@ public class StatsController {
     public ReservationCountDTO getReservationsCountLastNDays(
             @RequestParam(defaultValue = "7") int days) {
         return statsService.getReservationsCountLastNDays(days);
+    }
+
+    @GetMapping("/reservations/daily")
+    @Operation(summary = "Get daily reservations count for the last N days")
+    public List<DailyReservationStatsDTO> getDailyReservations(
+            @RequestParam int days) {
+        return statsService.getDailyReservationsCountLastNDaysStats(days);
     }
 }

@@ -98,6 +98,7 @@ All notable changes to this project are documented here.
 - Added statistics endpoint (GET /api/stats) returning total counts of tables and reservations.
 - Extended Stats API (Dashboard) to include: total tables, total reservations, active, cancelled, and today's reservations.
 - Added /api/stats/reservations endpoint with `days` parameter to get reservation count for the last N days.
+- Added /api/stats/reservations/daily?days= endpoint with `days` parameter to get daily reservation counts for the past N days
 
 ---
 
