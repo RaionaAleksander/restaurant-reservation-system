@@ -175,9 +175,8 @@ public class DataInitializer implements CommandLineRunner {
                         LocalDateTime adjustedNow = now.withSecond(0).withNano(0);
 
                         int remainder = adjustedNow.getMinute() % 15;
-
                         if (remainder != 0) {
-                            adjustedNow = now.plusMinutes(15 - remainder);
+                            adjustedNow = adjustedNow.plusMinutes(15 - remainder); // используем adjustedNow, а не now
                         }
 
                         start = adjustedNow;
