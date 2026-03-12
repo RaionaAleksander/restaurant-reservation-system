@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Build
+target
+build
+
+# Node
+node_modules
+npm-debug.log
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Environment
+.env
+
+# Documentation
+README.md
+docs

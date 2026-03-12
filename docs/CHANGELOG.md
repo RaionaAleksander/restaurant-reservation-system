@@ -126,6 +126,7 @@ All notable changes to this project are documented here.
 - Added Docker support: Dockerfile and docker-compose.yml for backend + Postgres
 - Added Docker multi-stage build configuration for backend using Maven and Eclipse Temurin JDK 21
 - Fixed Docker database password configuration by quoting the value in docker-compose.yml to properly handle special characters (e.g. '!') in environment variables.
+- Added .dockerignore to exclude unnecessary files (git metadata, build artifacts, IDE files) from Docker build context to improve build performance and reduce image size.
 
 ---
 
