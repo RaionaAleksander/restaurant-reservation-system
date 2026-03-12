@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_DB: restaurant_db
       POSTGRES_USER: restaurant_user
-      POSTGRES_PASSWORD: restaurant123
+      POSTGRES_PASSWORD: "restaurant123!"
     ports:
       - "5432:5432"
 
@@ -20,7 +20,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/restaurant_db
       SPRING_DATASOURCE_USERNAME: restaurant_user
-      SPRING_DATASOURCE_PASSWORD: restaurant123
+      SPRING_DATASOURCE_PASSWORD: "restaurant123!"
     ports:
       - "8080:8080"
 
