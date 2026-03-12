@@ -121,6 +121,13 @@ All notable changes to this project are documented here.
 
 ---
 
+## Infrastructure Improvements
+
+- Added Docker support: Dockerfile and docker-compose.yml for backend + Postgres
+- Added Docker multi-stage build configuration for backend using Maven and Eclipse Temurin JDK 21
+
+---
+
 ## Bug Fixes
 
 - Fixed infinite JSON recursion in bidirectional JPA relationship

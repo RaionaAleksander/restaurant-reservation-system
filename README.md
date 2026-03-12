@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 19.5 hours
+Total time spent: 20 hours
 
 ## Architecture
 
