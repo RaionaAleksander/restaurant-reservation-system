@@ -59,6 +59,8 @@ All notable changes to this project are documented here.
   - Maximum page size: 100
   - Page indexing starts from 0 (`one-indexed-parameters=false`)
 - Added global CORS configuration to allow frontend access from http://localhost:3000
+- Extended CORS configuration to support multiple frontend development ports
+- Added configurable CORS origins via application.properties
 
 ---
 
