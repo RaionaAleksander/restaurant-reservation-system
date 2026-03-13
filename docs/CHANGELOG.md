@@ -135,6 +135,12 @@ All notable changes to this project are documented here.
 
 ---
 
+## Documentation Improvements
+
+- Improved README with Docker and local run instructions
+
+---
+
 ## Bug Fixes
 
 - Fixed infinite JSON recursion in bidirectional JPA relationship

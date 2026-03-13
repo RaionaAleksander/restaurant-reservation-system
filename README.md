@@ -84,22 +84,89 @@ Otherwise, table positions displayed in the UI may not match the actual layout.
 
 ## How to Run
 
-### 1. Clone repository
-git clone [https://github.com/RaionaAleksander/restaurant-reservation-system.git](https://github.com/RaionaAleksander/restaurant-reservation-system)
+### Option 1 — Run with Docker (recommended)
 
-### 2. Configure database
+1. Make sure Docker and Docker Compose are installed.
 
-Create PostgreSQL database: **restaurant_db**
+2. Clone repository
 
-Create user: **restaurant_user**
+```
+git clone https://github.com/RaionaAleksander/restaurant-reservation-system.git
+cd restaurant-reservation-system
+```
 
-Update **application.properties** with credentials.
+3. Start the application
 
-### 3. Run application
+```
+docker-compose up --build
+```
 
-mvn spring-boot:run (or ./mvnw spring-boot:run)
+The application will start on:
 
-Application will start on: http://localhost:8080
+```
+http://localhost:8080
+```
+
+Swagger UI:
+
+```
+http://localhost:8080/swagger-ui.html
+```
+
+---
+
+### Option 2 — Run locally
+
+#### 1. Clone repository
+
+```
+git clone https://github.com/RaionaAleksander/restaurant-reservation-system.git
+cd restaurant-reservation-system
+```
+
+#### 2. Configure database
+
+Create PostgreSQL database:
+
+```
+restaurant_db
+```
+
+Create user:
+
+```
+restaurant_user
+```
+
+Update credentials in:
+
+```
+src/main/resources/application.properties
+```
+
+#### 3. Run application
+
+```
+mvn spring-boot:run
+```
+
+or
+
+```
+./mvnw spring-boot:run
+```
+
+Application will start on:
+
+```
+http://localhost:8080
+```
+
+Swagger UI:
+
+```
+http://localhost:8080/swagger-ui.html
+```
 
 ## Documentation
 
@@ -112,7 +179,5 @@ Project documentation is available in the `docs` folder:
 
 Swagger UI:
 http://localhost:8080/swagger-ui.html
-
-## API Documentation
 
 Full API documentation is available in: [API Documentation](docs/API.md)
