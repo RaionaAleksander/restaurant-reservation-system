@@ -21,7 +21,7 @@ Built with Spring Boot (Java 21).
 ## Project Status
 
 - Started: 28.02.2026  
-- Total time spent: 23.5 hours  
+- Total time spent: 24 hours  
 - Current stage: Backend foundation (database, entities, APIs, Docker)  
 
 ---
