@@ -4,83 +4,69 @@ Web application for restaurant table reservation and intelligent table recommend
 
 Built with Spring Boot (Java 21).
 
+---
+
 ## Tech Stack
 
-- Java 21
-- Spring Boot
-- Spring Data JPA
-- PostgreSQL
-- Springdoc OpenAPI (Swagger)
-- Maven
+- Java 21  
+- Spring Boot  
+- Spring Data JPA  
+- PostgreSQL  
+- Maven  
+- Springdoc OpenAPI (Swagger)  
+- Docker & Docker Compose  
 
-## Development Status 
+---
 
-Project started: 28.02.2026 
-Current stage: Backend foundation (database + entities)
+## Project Status
 
-## Time Tracking 
+- Started: 28.02.2026  
+- Total time spent: 23 hours  
+- Current stage: Backend foundation (database, entities, APIs, Docker)  
 
-Total time spent: 23 hours
+---
 
 ## Architecture
 
-Project follows layered architecture:
+Project follows a layered architecture:
 
 Controller → Service → Repository → Database
 
-- Controllers handle HTTP requests
-- Services contain business logic
-- Repositories handle database operations
+- **Controllers** handle HTTP requests  
+- **Services** implement business logic  
+- **Repositories** handle database operations  
+
+---
 
 ## Restaurant Layout
 
-The application uses a predefined restaurant layout loaded from `tables-config.json` during application startup.
-
-The restaurant contains **40 tables** distributed across different zones:
+The restaurant contains **40 tables** across zones:
 
 - **Main Hall:** 22 tables  
 - **Terrace:** 12 tables  
 - **Private Rooms:** 6 tables  
 
-### Seating Capacity
+### Table Capacities
 
-- Private room tables:
-  - 2 tables with capacity **5**
-  - 4 tables with capacity **6**
-- Main hall and terrace tables:
-  - Capacity between **1 and 4 guests**
+- Private rooms: 2 tables of 5 seats, 4 tables of 6 seats  
+- Main hall & terrace: 1–4 guests  
 
 ### Special Areas
 
-- A **kids zone** is present in the restaurant.
-- **4 tables** are located near the kids zone.
+- Kids zone (4 tables nearby)  
+- Tables near windows / quiet corners / accessible for disabled  
 
-### Coordinates
+### Table Coordinates
 
-Each table has spatial coordinates (`posX`, `posY`) representing its position in the restaurant layout.  
-These coordinates allow the system to support future features such as:
+Each table has (`posX`, `posY`) for front-end rendering and future layout/visualization.  
 
-- visual table layout
-- intelligent table recommendation
-- dynamic table grouping
+**Diagram:**
 
-### Restaurant Layout Diagram
+![Restaurant Layout](src/main/resources/restaurant-layout.png)  
 
-Below is a conceptual layout of the restaurant:
+⚠️ If modifying layout, update both `tables-config.json` and the diagram to maintain UI consistency.
 
-![Restaurant Layout](src/main/resources/restaurant-layout.png)
-
-### Layout Consistency Notice
-
-The restaurant layout is defined by two components:
-
-1. The layout image (`restaurant-layout.png`)
-2. The table configuration file (`tables-config.json`)
-
-The frontend renders tables on top of the layout image using the coordinates (`posX`, `posY`) defined in the configuration file.
-
-⚠️ If the restaurant layout is modified, both the image and the table configuration must be updated accordingly.
-Otherwise, table positions displayed in the UI may not match the actual layout.
+---
 
 ## How to Run
 
@@ -156,28 +142,39 @@ or
 ./mvnw spring-boot:run
 ```
 
-Application will start on:
+App & Swagger endpoints same as above.
 
-```
-http://localhost:8080
-```
-
-Swagger UI:
-
-```
-http://localhost:8080/swagger-ui.html
-```
+---
 
 ## Documentation
 
-Project documentation is available in the `docs` folder:
+All project docs are in docs/:
 
-- Project changelog: `docs/CHANGELOG.md`
-- Project roadmap: `docs/ROADMAP.md`
+- [Project Roadmap](docs/ROADMAP.md)
 
-## API Documentation
+- [API Reference](docs/API.md)
 
-Swagger UI:
-http://localhost:8080/swagger-ui.html
+- [Changelog](docs/CHANGELOG.md)
 
-Full API documentation is available in: [API Documentation](docs/API.md)
+## API Highlights
+
+### Tables API Example
+
+```http
+GET /api/v1/tables?capacity=4&nearWindow=true&startTime=2026-03-12T18:00:00&endTime=2026-03-12T19:30:00
+```
+
+### Reservation Creation Example
+
+```http
+POST /api/v1/reservations
+Content-Type: application/json
+
+{
+  "tableId": 5,
+  "customerName": "Alice",
+  "partySize": 3,
+  "startTime": "2026-03-12T18:00:00",
+  "endTime": "2026-03-12T19:00:00"
+}
+```

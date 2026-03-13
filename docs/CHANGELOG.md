@@ -139,6 +139,7 @@ All notable changes to this project are documented here.
 
 - Improved README with Docker and local run instructions
 - Updated project roadmap to reflect implemented features and future improvements
+- Restructured README for clarity and readability
 
 ---
 
