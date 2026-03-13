@@ -120,6 +120,7 @@ All notable changes to this project are documented here.
 - Added group/double reservation API (`POST /api/reservations/group`) allowing to reserve multiple tables simultaneously for the same customer and time slot. Introduced `parentReservationId` field in Reservation and ReservationDTO to link group reservations.
 - Added API endpoint GET /api/reservation-rules to expose restaurant reservation configuration (working hours, booking window, and duration limits) for frontend usage.
 - Added GET /api/restaurant-info endpoint to provide aggregated restaurant configuration including reservation rules, zones, and table statistics for frontend initialization.
+- Added GET /api/reservations/timeline endpoint to return daily reservation schedule grouped by tables for timeline visualization.
 
 ---
 

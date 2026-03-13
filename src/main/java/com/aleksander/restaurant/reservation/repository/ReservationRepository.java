@@ -34,4 +34,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
             @Param("status") ReservationStatus status,
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to);
+
+    List<Reservation> findByStartTimeBetween(
+            LocalDateTime startOfDay,
+            LocalDateTime endOfDay);
 }
