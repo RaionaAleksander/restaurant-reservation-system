@@ -20,7 +20,7 @@ Current stage: Backend foundation (database + entities)
 
 ## Time Tracking 
 
-Total time spent: 22 hours
+Total time spent: 22.5 hours
 
 ## Architecture
 
@@ -113,50 +113,6 @@ Project documentation is available in the `docs` folder:
 Swagger UI:
 http://localhost:8080/swagger-ui.html
 
-### Tables API
+## API Documentation
 
-Retrieve restaurant tables with flexible filtering.
-
-Endpoint:
-
-GET /api/tables
-
-Supported filters:
-
-- capacity - minimum required number of seats at the table. Tables with larger capacity are also returned.
-- zone
-- nearWindow
-- nearKidsRoom
-- quietCorner
-- accessible
-- startTime
-- endTime
-
-Examples:
-
-GET /api/tables?capacity=4
-
-GET /api/tables?zone=TERRACE&nearWindow=true
-
-GET /api/tables?startTime=2026-03-12T18:00:00&endTime=2026-03-12T19:30:00
-
-GET /api/tables?capacity=4&zone=MAIN_HALL&quietCorner=true
-
-### Cancel Reservation
-
-Cancel an existing reservation.
-
-Endpoint:
-
-PATCH /api/reservations/{id}/cancel
-
-Description:
-Changes reservation status from ACTIVE to CANCELLED.
-
-Rules:
-- Completed reservations cannot be cancelled.
-- If reservation does not exist, an error is returned.
-
-Example:
-
-PATCH /api/reservations/5/cancel
+Full API documentation is available in: [API Documentation](docs/API.md)
