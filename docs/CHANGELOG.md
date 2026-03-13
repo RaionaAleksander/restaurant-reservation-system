@@ -122,6 +122,7 @@ All notable changes to this project are documented here.
 - Added GET /api/restaurant-info endpoint to provide aggregated restaurant configuration including reservation rules, zones, and table statistics for frontend initialization.
 - Added GET /api/reservations/timeline endpoint to return daily reservation schedule grouped by tables for timeline visualization.
 - Added GET /api/health endpoint to provide a simple service health check returning application status.
+- Introduced API versioning by prefixing all endpoints with /api/v1 to support future backward-compatible API evolution.
 
 ---
 

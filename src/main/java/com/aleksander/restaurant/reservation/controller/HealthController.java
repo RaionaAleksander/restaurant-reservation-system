@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aleksander.restaurant.reservation.dto.HealthResponse;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class HealthController {
 
     @GetMapping("/health")

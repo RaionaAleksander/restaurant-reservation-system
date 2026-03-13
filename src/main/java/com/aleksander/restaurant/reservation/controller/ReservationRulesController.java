@@ -14,7 +14,7 @@ public class ReservationRulesController {
 
     private final ReservationRulesService rulesService;
 
-    @GetMapping("/api/reservation-rules")
+    @GetMapping("/api/v1/reservation-rules")
     public ReservationRulesDTO getRules() {
         return rulesService.getRules();
     }
