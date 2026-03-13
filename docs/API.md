@@ -238,7 +238,7 @@ Provides reservation analytics and dashboard data.
 
 ## Dashboard Stats
 
-Returns general statistics.
+Returns aggregated statistics of the restaurant.
 
 ```
 GET /api/v1/stats
@@ -252,7 +252,8 @@ Example response:
   "totalReservations": 120,
   "activeReservations": 8,
   "todayReservations": 14,
-  "cancelledReservations": 5
+  "cancelledReservations": 5,
+  "completedReservations": 60
 }
 ```
 
@@ -268,7 +269,7 @@ Returns:
 
 * cancelled reservations
 
-
+* completed reservations 
 
 ---
 

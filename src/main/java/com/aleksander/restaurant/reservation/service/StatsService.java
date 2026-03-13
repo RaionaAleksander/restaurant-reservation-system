@@ -30,6 +30,7 @@ public class StatsService {
         long totalReservations = reservationRepository.count();
         long activeReservations = reservationRepository.countByStatus(ReservationStatus.ACTIVE);
         long cancelledReservations = reservationRepository.countByStatus(ReservationStatus.CANCELLED);
+        long completedReservations = reservationRepository.countByStatus(ReservationStatus.COMPLETED);
 
         LocalDate today = LocalDate.now();
         long todayReservations = reservationRepository.countByStartTimeBetween(
@@ -40,6 +41,7 @@ public class StatsService {
                 .totalTables(totalTables)
                 .totalReservations(totalReservations)
                 .activeReservations(activeReservations)
+                .completedReservations(completedReservations)
                 .cancelledReservations(cancelledReservations)
                 .todayReservations(todayReservations)
                 .build();

@@ -11,4 +11,5 @@ public class RestaurantStatsDTO {
     private long activeReservations;
     private long todayReservations;
     private long cancelledReservations;
+    private long completedReservations;
 }

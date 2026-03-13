@@ -123,6 +123,7 @@ All notable changes to this project are documented here.
 - Added GET /api/reservations/timeline endpoint to return daily reservation schedule grouped by tables for timeline visualization.
 - Added GET /api/health endpoint to provide a simple service health check returning application status.
 - Introduced API versioning by prefixing all endpoints with /api/v1 to support future backward-compatible API evolution.
+- Added 'completedReservations' field to /api/v1/stats endpoint to show the number of completed reservations.
 
 ---
 
